@@ -3,616 +3,514 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة متابعة التسجيلات - EPSP بريان</title>
-    <!-- Tailwind CSS + Tajawal Font -->
+    <title>EPSP Berriane | التحقق من التسجيلات</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <!-- Font Awesome for icons -->
+    <!-- Tajawal Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * { font-family: 'Tajawal', sans-serif; }
-        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 2rem;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        body { background: #f8fafc; min-height: 100vh; }
+        
+        /* Professional Cards */
+        .status-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 40px -15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(226, 232, 240, 0.6);
         }
-        .progress-bar {
-            height: 1rem;
-            border-radius: 1rem;
-            background: #e2e8f0;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #48bb78, #38a169);
-            transition: width 0.5s ease;
-            border-radius: 1rem;
-        }
-        .deadline-badge {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            color: #78350f;
-            padding: 0.75rem 1.5rem;
-            border-radius: 3rem;
-            font-weight: 700;
-            box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.3);
-        }
-        .admin-panel {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            color: white;
-        }
-        .nin-badge {
-            background: #e0f2fe;
-            color: #0369a1;
-            padding: 0.25rem 0.75rem;
-            border-radius: 2rem;
-            font-weight: 600;
-            font-family: monospace;
-            direction: ltr;
-            display: inline-block;
-        }
-        .status-registered {
-            background: #c6f6d5;
-            color: #22543d;
-            padding: 0.25rem 1rem;
-            border-radius: 2rem;
-            font-weight: 600;
-            font-size: 0.875rem;
-        }
-        .status-pending {
-            background: #fed7d7;
-            color: #742a2a;
-            padding: 0.25rem 1rem;
-            border-radius: 2rem;
-            font-weight: 600;
-            font-size: 0.875rem;
-        }
-        .btn-admin {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 0.75rem 2rem;
-            border-radius: 3rem;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-admin:hover {
+        .status-card:hover {
+            box-shadow: 0 20px 50px -15px rgba(0,150,136,0.2);
             transform: translateY(-2px);
-            box-shadow: 0 20px 30px -10px rgba(102, 126, 234, 0.5);
         }
-        .btn-outline-admin {
-            background: transparent;
-            border: 2px solid #667eea;
-            color: #667eea;
-            padding: 0.75rem 2rem;
-            border-radius: 3rem;
-            font-weight: 600;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        .btn-outline-admin:hover {
-            background: #667eea;
-            color: white;
-        }
-        .search-input {
+        
+        /* Professional Input */
+        .professional-input {
             border: 2px solid #e2e8f0;
-            border-radius: 3rem;
-            padding: 1rem 2rem;
+            border-radius: 1rem;
+            padding: 1rem 1.5rem;
             width: 100%;
             font-size: 1.1rem;
             transition: all 0.3s;
             background: white;
         }
-        .search-input:focus {
+        .professional-input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            border-color: #0d9488;
+            box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
         }
-        .floating-action {
+        
+        /* Professional Button */
+        .professional-btn {
+            background: #0d9488;
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 1rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            white-space: nowrap;
+        }
+        .professional-btn:hover {
+            background: #0f766e;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px -5px rgba(13, 148, 136, 0.4);
+        }
+        .professional-btn-outline {
+            background: transparent;
+            border: 2px solid #0d9488;
+            color: #0d9488;
+            padding: 0.875rem 2rem;
+            border-radius: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .professional-btn-outline:hover {
+            background: #0d9488;
+            color: white;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            background: #e2e8f0;
+            border-radius: 2rem;
+            height: 1rem;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0d9488, #14b8a6);
+            border-radius: 2rem;
+            transition: width 1s ease;
+        }
+        
+        /* Deadline Badge */
+        .deadline-badge {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            padding: 0.75rem 2rem;
+            border-radius: 3rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            border: 1px solid #fbbf24;
+        }
+        
+        /* Message Cards */
+        .message-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+            border-right: 6px solid;
+        }
+        .message-card.success { border-right-color: #10b981; }
+        .message-card.warning { border-right-color: #f59e0b; }
+        .message-card.error { border-right-color: #ef4444; }
+        
+        /* Floating Admin Button */
+        .floating-btn {
             position: fixed;
             bottom: 2rem;
             left: 2rem;
-            z-index: 50;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
+            background: #1e293b;
+            color: white;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 3.5rem;
+            display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+            z-index: 40;
         }
-        .modal.active {
-            display: flex;
+        .floating-btn:hover { transform: scale(1.1); background: #0f172a; }
+        
+        /* Admin Modal */
+        .admin-modal {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
         }
-        .modal-content {
+        .admin-modal-content {
             background: white;
             border-radius: 2rem;
             padding: 2rem;
             max-width: 500px;
             width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Stat Cards */
+        .stat-card {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
         }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4 md:p-6 lg:p-8">
 
     <!-- Floating Admin Button -->
-    <div class="floating-action">
-        <button onclick="toggleAdminModal()" class="btn-admin shadow-2xl flex items-center gap-2">
-            <i class="fas fa-cog"></i>
-            <span>لوحة الإدارة</span>
-        </button>
+    <div class="floating-btn" onclick="toggleAdminModal()">
+        <i class="fas fa-cog text-xl"></i>
     </div>
 
     <!-- Admin Modal -->
-    <div id="adminModal" class="modal">
-        <div class="modal-content" dir="rtl">
+    <div id="adminModal" class="fixed inset-0 admin-modal hidden items-center justify-center z-50">
+        <div class="admin-modal-content">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">👑 لوحة الإدارة</h2>
+                <h2 class="text-2xl font-bold text-gray-800">لوحة الإدارة</h2>
                 <button onclick="toggleAdminModal()" class="text-gray-500 hover:text-gray-700">
                     <i class="fas fa-times text-2xl"></i>
                 </button>
             </div>
             
-            <!-- Admin Login (simple for demo) -->
+            <!-- Admin Login -->
             <div id="adminLoginSection">
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">كلمة المرور</label>
-                    <input type="password" id="adminPassword" placeholder="أدخل كلمة المرور" class="input-field" value="admin123">
+                    <label class="block text-gray-700 font-medium mb-2">كلمة المرور</label>
+                    <input type="password" id="adminPassword" placeholder="أدخل كلمة المرور" 
+                           class="professional-input" value="admin123">
                 </div>
-                <button onclick="adminLogin()" class="btn-admin w-full">دخول</button>
+                <button onclick="adminLogin()" class="professional-btn w-full">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>دخول</span>
+                </button>
             </div>
 
             <!-- Admin Panel (hidden until login) -->
             <div id="adminPanelContent" style="display: none;">
-                <div class="mb-4">
-                    <h3 class="font-bold text-gray-700 mb-2">📊 إحصائيات سريعة</h3>
-                    <div class="bg-gray-50 p-4 rounded-xl">
-                        <p>إجمالي الموظفين: <span id="totalEmployeesStat" class="font-bold text-teal-600">0</span></p>
-                        <p>المسجلون: <span id="registeredStat" class="font-bold text-green-600">0</span></p>
-                        <p>غير المسجلين: <span id="pendingStat" class="font-bold text-red-600">0</span></p>
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="stat-card text-center">
+                        <div class="text-2xl font-bold text-teal-600" id="totalEmployeesStat">0</div>
+                        <div class="text-xs text-gray-500">الإجمالي</div>
+                    </div>
+                    <div class="stat-card text-center">
+                        <div class="text-2xl font-bold text-green-600" id="registeredStat">0</div>
+                        <div class="text-xs text-gray-500">مسجل</div>
+                    </div>
+                    <div class="stat-card text-center">
+                        <div class="text-2xl font-bold text-red-600" id="pendingStat">0</div>
+                        <div class="text-xs text-gray-500">غير مسجل</div>
                     </div>
                 </div>
 
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">➕ إضافة موظف جديد (من منصة التسجيل)</label>
+                <!-- Add Employee -->
+                <div class="mb-6">
+                    <h3 class="font-bold text-gray-700 mb-3">➕ إضافة موظف مسجل</h3>
+                    <div class="space-y-3">
+                        <input type="text" id="newNin" placeholder="NIN" class="professional-input text-left" dir="ltr">
+                        <input type="text" id="newName" placeholder="الاسم الكامل" class="professional-input">
+                        <button onclick="addRegisteredEmployee()" class="professional-btn w-full">
+                            <i class="fas fa-save"></i>
+                            <span>إضافة</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Registered List (brief) -->
+                <div class="mb-6">
+                    <h3 class="font-bold text-gray-700 mb-3">📋 آخر المسجلين</h3>
+                    <div class="max-h-40 overflow-y-auto space-y-2 p-2 bg-gray-50 rounded-xl" id="registeredList"></div>
+                </div>
+
+                <!-- Deadline -->
+                <div>
+                    <h3 class="font-bold text-gray-700 mb-3">⏰ تعديل الموعد النهائي</h3>
                     <div class="flex gap-2">
-                        <input type="text" id="newNin" placeholder="NIN" class="input-field text-left" dir="ltr">
-                        <input type="text" id="newName" placeholder="الاسم الكامل" class="input-field">
+                        <input type="date" id="deadlineDate" class="professional-input">
+                        <button onclick="updateDeadline()" class="professional-btn-outline px-6">
+                            <i class="fas fa-check"></i>
+                        </button>
                     </div>
-                    <button onclick="addRegisteredEmployee()" class="btn-admin w-full mt-2">إضافة كمسجل</button>
-                </div>
-
-                <div class="mb-4">
-                    <h3 class="font-bold text-gray-700 mb-2">📋 قائمة الموظفين المسجلين</h3>
-                    <div class="max-h-60 overflow-y-auto border rounded-xl p-2">
-                        <div id="registeredList" class="space-y-2"></div>
-                    </div>
-                </div>
-
-                <div class="mt-4">
-                    <label class="block text-gray-700 font-semibold mb-2">⏰ تعديل تاريخ انتهاء التسجيل</label>
-                    <input type="date" id="deadlineDate" class="input-field">
-                    <button onclick="updateDeadline()" class="btn-outline-admin w-full mt-2">تحديث التاريخ</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Main Container -->
     <div class="max-w-4xl mx-auto">
-        <!-- Header -->
+        <!-- Header with Logo (no developer credit) -->
         <div class="text-center mb-8">
-            <div class="inline-block bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-4 rounded-full shadow-2xl mb-4">
-                <span class="text-3xl font-extrabold">🏥 EPSP Berriane</span>
+            <div class="inline-block mb-4">
+                <span class="text-7xl">🏥</span>
             </div>
-            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-                منصة متابعة التسجيلات
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-2 tracking-tight">
+                EPSP <span class="text-teal-600">Berriane</span>
             </h1>
-            <p class="text-xl text-white opacity-90">تم التطوير بواسطة: <span class="font-bold">Ing. Ferhat H. EPSP Berriane</span></p>
+            <p class="text-gray-500 text-lg">منصة التحقق من التسجيلات المهنية</p>
         </div>
 
-        <!-- Deadline Badge -->
-        <div class="flex justify-center mb-6">
-            <div class="deadline-badge flex items-center gap-2">
-                <i class="fas fa-clock"></i>
+        <!-- Deadline Banner -->
+        <div class="flex justify-center mb-8">
+            <div class="deadline-badge">
+                <i class="fas fa-calendar-alt"></i>
                 <span>آخر موعد للتسجيل: <span id="deadlineDisplay" class="font-extrabold">2025-03-30</span></span>
             </div>
         </div>
 
         <!-- Main Search Card -->
-        <div class="glass-card p-8 mb-6">
+        <div class="status-card p-6 md:p-8 mb-6">
             <div class="text-center mb-6">
-                <span class="text-6xl mb-4 block">🔍</span>
-                <h2 class="text-3xl font-bold text-gray-800">التحقق من حالة التسجيل</h2>
-                <p class="text-gray-600 mt-2">أدخل الرقم التعريفي الوطني (NIN) للتحقق من حالة تسجيلك</p>
+                <div class="w-20 h-20 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-search text-3xl text-teal-600"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">التحقق من حالة التسجيل</h2>
+                <p class="text-gray-500">أدخل الرقم التعريفي الوطني (NIN) للتحقق</p>
             </div>
 
             <!-- Search Box -->
-            <div class="flex flex-col md:flex-row gap-4">
+            <div class="flex flex-col md:flex-row gap-3">
                 <div class="flex-grow">
                     <input type="text" id="searchNin" 
-                           placeholder="أدخل الرقم التعريفي الوطني (NIN)" 
-                           class="search-input text-left" 
+                           placeholder="مثال: 298012345678" 
+                           class="professional-input text-left" 
                            dir="ltr"
                            onkeypress="handleKeyPress(event)">
                 </div>
-                <button onclick="searchEmployee()" 
-                        class="btn-admin text-lg px-8 py-4 flex items-center justify-center gap-2">
+                <button onclick="searchEmployee()" class="professional-btn md:w-auto w-full">
                     <i class="fas fa-search"></i>
                     <span>بحث</span>
                 </button>
             </div>
 
-            <!-- Progress Bar -->
-            <div class="mt-8">
-                <div class="flex justify-between text-sm text-gray-600 mb-2">
-                    <span>نسبة التسجيل</span>
-                    <span id="progressPercentage">0%</span>
+            <!-- Progress Section -->
+            <div class="mt-8 pt-6 border-t border-gray-100">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-gray-600 font-medium">نسبة الإنجاز</span>
+                    <span class="text-2xl font-bold text-teal-600" id="progressPercentage">0%</span>
                 </div>
-                <div class="progress-bar">
+                <div class="progress-container">
                     <div id="progressFill" class="progress-fill" style="width: 0%;"></div>
                 </div>
-                <div class="flex justify-between mt-2 text-gray-600">
-                    <span><span id="registeredCount">0</span> مسجل</span>
-                    <span><span id="totalCount">0</span> إجمالي</span>
+                <div class="flex justify-between mt-3 text-gray-500">
+                    <span><span class="font-bold text-gray-800" id="registeredCount">0</span> مسجل</span>
+                    <span><span class="font-bold text-gray-800" id="totalCount">0</span> إجمالي</span>
                 </div>
             </div>
         </div>
 
-        <!-- Result Message -->
-        <div id="resultMessage" class="hidden glass-card p-8 text-center mb-6 transition-all duration-300">
-            <div id="messageContent"></div>
-        </div>
-
-        <!-- Employee List (visible for admin in main view) -->
-        <div class="glass-card p-6" id="employeeListContainer">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-gray-800">📋 قائمة الموظفين</h3>
-                <div class="flex gap-2">
-                    <select id="filterStatus" onchange="filterEmployees()" class="border rounded-xl p-2">
-                        <option value="all">الكل</option>
-                        <option value="registered">مسجل</option>
-                        <option value="pending">غير مسجل</option>
-                    </select>
-                    <input type="text" id="searchFilter" placeholder="بحث..." class="border rounded-xl p-2" onkeyup="filterEmployees()">
-                </div>
-            </div>
-            <div id="employeesTable" class="space-y-2 max-h-96 overflow-y-auto">
-                <!-- Dynamic employee list will be inserted here -->
-            </div>
-        </div>
+        <!-- Result Message (dynamic) -->
+        <div id="resultMessage" class="hidden mb-6 fade-in"></div>
     </div>
 
     <script>
-        // Database simulation
-        let employees = [
-            { nin: "295076543210", name: "أحمد بن محمد", registered: true, dateRegistered: "2025-02-15" },
-            { nin: "298012345678", name: "فاطمة الزهراء خوجة", registered: true, dateRegistered: "2025-02-20" },
-            { nin: "299087654321", name: "علي بن يوسف", registered: false },
-            { nin: "297011122233", name: "سارة محمودي", registered: false },
-            { nin: "296044455566", name: "محمد أمين سعيدي", registered: false },
-            { nin: "294077788899", name: "نور الهدى بن علي", registered: false }
-        ];
-
-        let deadline = "2025-03-30";
+        // ==================== CONFIGURATION ====================
+        // Change this to your actual worker URL
+        const API_BASE = 'https://cpepspberriane.didcrist.workers.dev';
+        
+        // ==================== STATE ====================
+        let employees = [];
+        let deadline = '2025-03-30';
         let isAdminLoggedIn = false;
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            updateStats();
-            renderEmployeeList();
-            document.getElementById('deadlineDisplay').textContent = deadline;
-            document.getElementById('deadlineDate').value = deadline;
+        // ==================== INIT ====================
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadStats();
+            await loadDeadline();
         });
 
-        // Handle Enter key press
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                searchEmployee();
+        // ==================== API CALLS ====================
+        async function fetchAPI(endpoint, options = {}) {
+            const url = `${API_BASE}${endpoint}`;
+            const res = await fetch(url, {
+                ...options,
+                headers: { 'Content-Type': 'application/json', ...options.headers }
+            });
+            if (!res.ok) throw new Error(`API error: ${res.status}`);
+            return res.json();
+        }
+
+        async function loadStats() {
+            try {
+                const stats = await fetchAPI('/api/stats');
+                document.getElementById('registeredCount').textContent = stats.registered;
+                document.getElementById('totalCount').textContent = stats.total;
+                const percentage = stats.total > 0 ? Math.round((stats.registered / stats.total) * 100) : 0;
+                document.getElementById('progressPercentage').textContent = percentage + '%';
+                document.getElementById('progressFill').style.width = percentage + '%';
+                
+                if (isAdminLoggedIn) {
+                    document.getElementById('totalEmployeesStat').textContent = stats.total;
+                    document.getElementById('registeredStat').textContent = stats.registered;
+                    document.getElementById('pendingStat').textContent = stats.total - stats.registered;
+                }
+            } catch (e) {
+                console.error('Failed to load stats', e);
             }
         }
 
-        // Search employee by NIN
-        function searchEmployee() {
-            const nin = document.getElementById('searchNin').value.trim();
-            const resultDiv = document.getElementById('resultMessage');
-            const messageContent = document.getElementById('messageContent');
+        async function loadDeadline() {
+            try {
+                const data = await fetchAPI('/api/settings/deadline');
+                deadline = data.deadline || '2025-03-30';
+                document.getElementById('deadlineDisplay').textContent = deadline;
+                document.getElementById('deadlineDate').value = deadline;
+            } catch (e) {
+                console.error('Failed to load deadline', e);
+            }
+        }
 
+        async function searchEmployee() {
+            const nin = document.getElementById('searchNin').value.trim();
             if (!nin) {
-                showResult('الرجاء إدخال الرقم التعريفي الوطني', 'error');
+                showMessage('الرجاء إدخال الرقم التعريفي الوطني', 'error');
                 return;
             }
 
-            const employee = employees.find(emp => emp.nin === nin);
-
-            if (employee) {
-                if (employee.registered) {
-                    showResult(`
-                        <div class="text-center">
-                            <span class="text-6xl mb-4 block">✅</span>
-                            <h3 class="text-2xl font-bold text-green-600 mb-2">تم التسجيل بنجاح!</h3>
-                            <p class="text-gray-700 mb-2">الموظف: ${employee.name}</p>
-                            <p class="text-gray-600">تاريخ التسجيل: ${employee.dateRegistered || 'غير محدد'}</p>
-                            <p class="text-sm text-gray-500 mt-4">البطاقة المهنية قيد الطباعة</p>
-                        </div>
-                    `, 'success');
+            try {
+                const emp = await fetchAPI(`/api/employee?nin=${encodeURIComponent(nin)}`);
+                if (emp) {
+                    if (emp.registered) {
+                        showMessage(`
+                            <div class="text-center">
+                                <span class="text-6xl mb-4 block">✅</span>
+                                <h3 class="text-2xl font-bold text-green-600 mb-2">تم التسجيل بنجاح</h3>
+                                <p class="text-gray-700 mb-2">الموظف: ${emp.name}</p>
+                                <p class="text-gray-600">تاريخ التسجيل: ${emp.date_registered || 'غير محدد'}</p>
+                                <p class="text-sm text-gray-500 mt-4">البطاقة المهنية قيد الطباعة</p>
+                            </div>
+                        `, 'success');
+                    } else {
+                        showMessage(`
+                            <div class="text-center">
+                                <span class="text-6xl mb-4 block">⚠️</span>
+                                <h3 class="text-2xl font-bold text-orange-600 mb-2">لم يتم التسجيل بعد</h3>
+                                <p class="text-gray-700 mb-4">الموظف: ${emp.name}</p>
+                                <div class="bg-orange-50 border-r-4 border-orange-500 p-4 rounded-lg">
+                                    <p class="text-orange-800 font-bold mb-2">يجب التسجيل قبل تاريخ: ${deadline}</p>
+                                    <p class="text-orange-700">الرجاء التوجه إلى منصة التسجيل:</p>
+                                    <a href="https://drhepspberriane.page.dev" target="_blank" 
+                                       class="inline-block mt-2 bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition">
+                                        drhepspberriane.page.dev
+                                    </a>
+                                </div>
+                            </div>
+                        `, 'warning');
+                    }
                 } else {
-                    showResult(`
+                    showMessage(`
                         <div class="text-center">
-                            <span class="text-6xl mb-4 block">⚠️</span>
-                            <h3 class="text-2xl font-bold text-orange-600 mb-2">لم يتم التسجيل بعد</h3>
-                            <p class="text-gray-700 mb-4">الموظف: ${employee.name}</p>
-                            <div class="bg-orange-50 border-r-4 border-orange-500 p-4 rounded-lg">
-                                <p class="text-orange-800 font-bold mb-2">يجب التسجيل قبل تاريخ: ${deadline}</p>
-                                <p class="text-orange-700">الرجاء التوجه إلى منصة التسجيل:</p>
+                            <span class="text-6xl mb-4 block">❓</span>
+                            <h3 class="text-2xl font-bold text-red-600 mb-2">الرقم غير موجود</h3>
+                            <p class="text-gray-700 mb-4">لم يتم العثور على موظف بهذا الرقم</p>
+                            <div class="bg-red-50 border-r-4 border-red-500 p-4 rounded-lg">
+                                <p class="text-red-800 mb-2">يجب عليك التسجيل أولاً في المنصة الرئيسية</p>
                                 <a href="https://drhepspberriane.page.dev" target="_blank" 
-                                   class="inline-block mt-2 bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition">
-                                    drhepspberriane.page.dev
+                                   class="inline-block mt-2 bg-red-500 text-white px-6 py-2 rounded-full hover:bg-red-600 transition">
+                                    الذهاب إلى منصة التسجيل
                                 </a>
                             </div>
                         </div>
-                    `, 'warning');
+                    `, 'error');
                 }
-            } else {
-                showResult(`
-                    <div class="text-center">
-                        <span class="text-6xl mb-4 block">❓</span>
-                        <h3 class="text-2xl font-bold text-red-600 mb-2">الرقم غير موجود في قاعدة البيانات</h3>
-                        <p class="text-gray-700 mb-4">لم يتم العثور على موظف بهذا الرقم التعريفي الوطني</p>
-                        <div class="bg-red-50 border-r-4 border-red-500 p-4 rounded-lg">
-                            <p class="text-red-800 mb-2">يجب عليك التسجيل أولاً في المنصة الرئيسية</p>
-                            <a href="https://drhepspberriane.page.dev" target="_blank" 
-                               class="inline-block mt-2 bg-red-500 text-white px-6 py-2 rounded-full hover:bg-red-600 transition">
-                                الذهاب إلى منصة التسجيل
-                            </a>
-                        </div>
-                    </div>
-                `, 'error');
+            } catch (e) {
+                showMessage('حدث خطأ في الاتصال بالخادم', 'error');
             }
         }
 
-        function showResult(message, type) {
+        function showMessage(html, type) {
             const resultDiv = document.getElementById('resultMessage');
-            const messageContent = document.getElementById('messageContent');
-            
-            messageContent.innerHTML = message;
+            resultDiv.innerHTML = `<div class="message-card ${type}">${html}</div>`;
             resultDiv.classList.remove('hidden');
-            
-            // Change colors based on type
-            if (type === 'success') {
-                resultDiv.style.borderRight = '8px solid #48bb78';
-            } else if (type === 'warning') {
-                resultDiv.style.borderRight = '8px solid #fbbf24';
-            } else {
-                resultDiv.style.borderRight = '8px solid #f87171';
-            }
         }
 
-        // Update statistics
-        function updateStats() {
-            const total = employees.length;
-            const registered = employees.filter(emp => emp.registered).length;
-            const percentage = total > 0 ? Math.round((registered / total) * 100) : 0;
-
-            document.getElementById('registeredCount').textContent = registered;
-            document.getElementById('totalCount').textContent = total;
-            document.getElementById('progressPercentage').textContent = percentage + '%';
-            document.getElementById('progressFill').style.width = percentage + '%';
-            
-            // Update admin stats if visible
-            if (isAdminLoggedIn) {
-                document.getElementById('totalEmployeesStat').textContent = total;
-                document.getElementById('registeredStat').textContent = registered;
-                document.getElementById('pendingStat').textContent = total - registered;
-            }
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') searchEmployee();
         }
 
-        // Render employee list
-        function renderEmployeeList(filteredEmployees = null) {
-            const list = filteredEmployees || employees;
-            const container = document.getElementById('employeesTable');
-            
-            container.innerHTML = list.map(emp => `
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
-                    <div>
-                        <span class="nin-badge">${emp.nin}</span>
-                        <span class="mr-2 font-bold">${emp.name}</span>
-                    </div>
-                    <div>
-                        ${emp.registered ? 
-                            '<span class="status-registered"><i class="fas fa-check-circle ml-1"></i>مسجل</span>' : 
-                            '<span class="status-pending"><i class="fas fa-clock ml-1"></i>غير مسجل</span>'
-                        }
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Filter employees
-        function filterEmployees() {
-            const filterStatus = document.getElementById('filterStatus').value;
-            const searchText = document.getElementById('searchFilter').value.toLowerCase();
-            
-            let filtered = employees;
-            
-            if (filterStatus !== 'all') {
-                filtered = filtered.filter(emp => 
-                    filterStatus === 'registered' ? emp.registered : !emp.registered
-                );
-            }
-            
-            if (searchText) {
-                filtered = filtered.filter(emp => 
-                    emp.name.includes(searchText) || emp.nin.includes(searchText)
-                );
-            }
-            
-            renderEmployeeList(filtered);
-        }
-
-        // Admin functions
+        // ==================== ADMIN FUNCTIONS ====================
         function toggleAdminModal() {
             const modal = document.getElementById('adminModal');
-            modal.classList.toggle('active');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
         }
 
-        function adminLogin() {
+        async function adminLogin() {
             const password = document.getElementById('adminPassword').value;
-            // Simple password check (in production, use proper authentication)
+            // In production, validate via API with a secure token
             if (password === 'admin123') {
                 isAdminLoggedIn = true;
                 document.getElementById('adminLoginSection').style.display = 'none';
                 document.getElementById('adminPanelContent').style.display = 'block';
-                updateStats();
-                renderRegisteredList();
+                await loadStats();
+                await loadRegisteredList();
             } else {
                 alert('كلمة المرور غير صحيحة');
             }
         }
 
-        function renderRegisteredList() {
-            const registered = employees.filter(emp => emp.registered);
-            const listContainer = document.getElementById('registeredList');
-            
-            listContainer.innerHTML = registered.map(emp => `
-                <div class="bg-gray-50 p-2 rounded-lg flex justify-between items-center">
-                    <span class="font-mono">${emp.nin}</span>
-                    <span>${emp.name}</span>
-                </div>
-            `).join('');
-            
-            if (registered.length === 0) {
-                listContainer.innerHTML = '<p class="text-gray-500 text-center">لا يوجد موظفين مسجلين</p>';
+        async function loadRegisteredList() {
+            try {
+                const employees = await fetchAPI('/api/employees?registered=true');
+                const list = document.getElementById('registeredList');
+                list.innerHTML = employees.map(emp => `
+                    <div class="bg-white p-2 rounded-lg flex justify-between items-center text-sm">
+                        <span class="font-mono">${emp.nin}</span>
+                        <span>${emp.name}</span>
+                    </div>
+                `).join('');
+                if (employees.length === 0) {
+                    list.innerHTML = '<p class="text-gray-500 text-center">لا يوجد مسجلون</p>';
+                }
+            } catch (e) {
+                console.error('Failed to load registered list', e);
             }
         }
 
-        function addRegisteredEmployee() {
+        async function addRegisteredEmployee() {
             const nin = document.getElementById('newNin').value.trim();
             const name = document.getElementById('newName').value.trim();
-            
             if (!nin || !name) {
                 alert('الرجاء إدخال جميع البيانات');
                 return;
             }
-            
-            // Check if employee already exists
-            const existingIndex = employees.findIndex(emp => emp.nin === nin);
-            
-            if (existingIndex !== -1) {
-                // Update existing
-                employees[existingIndex].registered = true;
-                employees[existingIndex].name = name;
-                employees[existingIndex].dateRegistered = new Date().toISOString().split('T')[0];
-            } else {
-                // Add new
-                employees.push({
-                    nin: nin,
-                    name: name,
-                    registered: true,
-                    dateRegistered: new Date().toISOString().split('T')[0]
+
+            try {
+                await fetchAPI('/api/employee', {
+                    method: 'POST',
+                    body: JSON.stringify({ nin, name, registered: true, date_registered: new Date().toISOString().split('T')[0] })
                 });
+                document.getElementById('newNin').value = '';
+                document.getElementById('newName').value = '';
+                await loadStats();
+                await loadRegisteredList();
+                alert('تمت الإضافة بنجاح');
+            } catch (e) {
+                alert('فشلت الإضافة');
             }
-            
-            // Clear inputs
-            document.getElementById('newNin').value = '';
-            document.getElementById('newName').value = '';
-            
-            // Update everything
-            updateStats();
-            renderEmployeeList();
-            renderRegisteredList();
-            filterEmployees();
-            
-            alert('تم إضافة الموظف كمسجل بنجاح');
         }
 
-        function updateDeadline() {
+        async function updateDeadline() {
             const newDeadline = document.getElementById('deadlineDate').value;
-            if (newDeadline) {
+            if (!newDeadline) return;
+            try {
+                await fetchAPI('/api/settings/deadline', {
+                    method: 'POST',
+                    body: JSON.stringify({ deadline: newDeadline })
+                });
                 deadline = newDeadline;
                 document.getElementById('deadlineDisplay').textContent = deadline;
-                alert('تم تحديث تاريخ انتهاء التسجيل بنجاح');
+                alert('تم تحديث الموعد النهائي');
+            } catch (e) {
+                alert('فشل التحديث');
             }
         }
-
-        // Simulate getting registered employees from drhepspberriane.page.dev
-        function syncFromMainPlatform() {
-            // This would normally be an API call to drhepspberriane.page.dev
-            // For demo, we'll simulate some new registrations
-            const mockNewRegistrations = [
-                { nin: "293011122233", name: "خديجة مرزوق" },
-                { nin: "292044455566", name: "عبد الرحمن بن سعيد" }
-            ];
-            
-            mockNewRegistrations.forEach(newEmp => {
-                const existing = employees.find(emp => emp.nin === newEmp.nin);
-                if (existing) {
-                    existing.registered = true;
-                    existing.name = newEmp.name;
-                    existing.dateRegistered = new Date().toISOString().split('T')[0];
-                } else {
-                    employees.push({
-                        ...newEmp,
-                        registered: true,
-                        dateRegistered: new Date().toISOString().split('T')[0]
-                    });
-                }
-            });
-            
-            updateStats();
-            renderEmployeeList();
-            renderRegisteredList();
-            alert('تمت المزامنة مع المنصة الرئيسية بنجاح');
-        }
-
-        // Export data
-        function exportData() {
-            const dataStr = JSON.stringify(employees, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            const exportFileDefaultName = `employees_${new Date().toISOString().split('T')[0]}.json`;
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-        }
     </script>
-
-    <!-- Admin action buttons (hidden until admin login) -->
-    <div style="display: none;" id="adminActions">
-        <button onclick="syncFromMainPlatform()" class="fixed bottom-2 right-2 bg-green-600 text-white p-3 rounded-full shadow-lg">
-            <i class="fas fa-sync-alt"></i>
-        </button>
-        <button onclick="exportData()" class="fixed bottom-2 right-20 bg-blue-600 text-white p-3 rounded-full shadow-lg">
-            <i class="fas fa-download"></i>
-        </button>
-    </div>
-
-    <script>
-        // Show admin actions when logged in
-        const originalAdminLogin = adminLogin;
-        adminLogin = function() {
-            originalAdminLogin();
-            if (isAdminLoggedIn) {
-                document.getElementById('adminActions').style.display = 'block';
-            }
-        };
-    </script>
-
-    <!-- Footer -->
-    <footer class="max-w-4xl mx-auto mt-12 text-center text-white opacity-80 text-sm">
-        <p>تم التطوير بواسطة <span class="font-bold">Ing. Ferhat H. EPSP Berriane</span> © 2025</p>
-        <p class="mt-1">منصة متابعة التسجيلات - جميع الحقوق محفوظة</p>
-    </footer>
 </body>
 </html>
