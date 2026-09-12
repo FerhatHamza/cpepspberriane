@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPSP Berriane | قائمة الموظفين</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tajawal Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { font-family: 'Tajawal', sans-serif; }
+        body { background: #f1f5f9; min-height: 100vh; }
+
+        /* ---------- Header ---------- */
+        .page-header {
+            background: linear-gradient(135deg, #0f766e 0%, #0d9488 55%, #14b8a6 100%);
+            border-radius: 2rem;
+            box-shadow: 0 20px 45px -20px rgba(13, 148, 136, 0.65);
+            position: relative;
+            overflow: hidden;
+        }
+        .page-header::after {
+            content: "";
+            position: absolute;
+            width: 320px; height: 320px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+            top: -140px; left: -90px;
+        }
+        .page-header::before {
+            content: "";
+            position: absolute;
+            width: 220px; height: 220px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+            bottom: -120px; right: -60px;
+        }
+
+        /* ---------- Stat Cards ---------- */
+        .stat-box {
+            background: white;
+            border-radius: 1.25rem;
+            padding: 1.25rem 1rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 8px 25px -18px rgba(0,0,0,0.35);
+            transition: all .3s ease;
+        }
+        .stat-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 35px -20px rgba(13,148,136,0.55);
+            border-color: #99f6e4;
+        }
+        .stat-icon {
+            width: 2.75rem; height: 2.75rem;
+            border-radius: .9rem;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        /* ---------- Controls ---------- */
+        .search-input {
+            border: 2px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: .9rem 1.25rem .9rem 3rem;
+            width: 100%;
+            font-size: 1rem;
+            transition: all .3s;
+            background: white;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #0d9488;
+            box-shadow: 0 0 0 4px rgba(13,148,136,.12);
+        }
+        .filter-chip {
+            padding: .6rem 1.35rem;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: .95rem;
+            border: 2px solid #e2e8f0;
+            background: white;
+            color: #64748b;
+            cursor: pointer;
+            transition: all .25s;
+            white-space: nowrap;
+        }
+        .filter-chip:hover { border-color: #99f6e4; color: #0f766e; }
+        .filter-chip.active {
+            background: #0d9488;
+            border-color: #0d9488;
+            color: white;
+            box-shadow: 0 8px 20px -8px rgba(13,148,136,.6);
+        }
+
+        /* ---------- Employee Card ---------- */
+        .emp-card {
+            background: white;
+            border-radius: 1.35rem;
+            padding: 1.1rem 1.15rem;
+            border: 1px solid #e9eef5;
+            box-shadow: 0 6px 22px -18px rgba(15,23,42,.5);
+            transition: all .28s cubic-bezier(.4,0,.2,1);
+            position: relative;
+            overflow: hidden;
+        }
+        .emp-card::before {
+            content: "";
+            position: absolute;
+            top: 0; right: 0; bottom: 0;
+            width: 4px;
+            background: #e2e8f0;
+        }
+        .emp-card.is-registered::before { background: linear-gradient(180deg,#10b981,#34d399); }
+        .emp-card.is-pending::before { background: linear-gradient(180deg,#f59e0b,#fbbf24); }
+        .emp-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -22px rgba(13,148,136,.55);
+            border-color: #ccfbf1;
+        }
+
+        .avatar {
+            width: 3rem; height: 3rem;
+            min-width: 3rem;
+            border-radius: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff;
+            font-weight: 800;
+            font-size: 1.25rem;
+            box-shadow: 0 6px 16px -8px rgba(0,0,0,.45);
+        }
+
+        .badge {
+            display: inline-flex; align-items: center; gap: .35rem;
+            padding: .28rem .75rem;
+            border-radius: 999px;
+            font-size: .75rem;
+            font-weight: 700;
+        }
+        .badge-success { background: #d1fae5; color: #047857; }
+        .badge-warning { background: #fef3c7; color: #b45309; }
+
+        /* ---------- Buttons ---------- */
+        .btn-primary {
+            background: #0d9488; color: white;
+            padding: .8rem 1.6rem;
+            border-radius: 1rem;
+            font-weight: 600;
+            display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+            transition: all .3s; cursor: pointer; border: none;
+            white-space: nowrap;
+        }
+        .btn-primary:hover { background: #0f766e; transform: translateY(-1px); box-shadow: 0 12px 25px -10px rgba(13,148,136,.6); }
+        .btn-ghost {
+            background: white; color: #0f766e;
+            border: 2px solid #ccfbf1;
+            padding: .7rem 1.3rem;
+            border-radius: 1rem;
+            font-weight: 600;
+            display: inline-flex; align-items: center; gap: .5rem;
+            transition: all .25s; cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-ghost:hover { background: #f0fdfa; border-color: #5eead4; }
+
+        /* ---------- Pagination ---------- */
+        .page-btn {
+            min-width: 2.6rem; height: 2.6rem;
+            padding: 0 .6rem;
+            border-radius: .85rem;
+            border: 2px solid #e2e8f0;
+            background: white;
+            color: #475569;
+            font-weight: 700;
+            display: inline-flex; align-items: center; justify-content: center;
+            transition: all .22s; cursor: pointer;
+        }
+        .page-btn:hover:not(:disabled) { border-color: #5eead4; color: #0f766e; background: #f0fdfa; }
+        .page-btn.active {
+            background: #0d9488; border-color: #0d9488; color: white;
+            box-shadow: 0 8px 18px -8px rgba(13,148,136,.7);
+        }
+        .page-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+        /* ---------- Misc ---------- */
+        .fade-in { animation: fadeIn .45s ease both; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+        .skeleton {
+            background: linear-gradient(90deg, #eef2f7 25%, #e2e8f0 37%, #eef2f7 63%);
+            background-size: 400% 100%;
+            animation: shimmer 1.4s ease infinite;
+            border-radius: 1.35rem;
+            height: 128px;
+        }
+        @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 9px; height: 9px; }
+        ::-webkit-scrollbar-track { background: #eef2f7; }
+        ::-webkit-scrollbar-thumb { background: #99f6e4; border-radius: 9px; }
+        ::-webkit-scrollbar-thumb:hover { background: #5eead4; }
+    </style>
+</head>
+<body class="p-4 md:p-6 lg:p-8">
+
+<div class="max-w-6xl mx-auto">
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="page-header p-6 md:p-8 mb-6 text-white">
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-5">
+            <div class="flex items-center gap-4 text-center md:text-right flex-col md:flex-row">
+                <div class="bg-white/15 backdrop-blur rounded-2xl p-3 border border-white/20">
+                    <img src="/epsplogo.png" alt="EPSP Berriane" class="h-14 w-auto object-contain">
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">
+                        قائمة الموظفين <span class="text-teal-100">| EPSP Berriane</span>
+                    </h1>
+                    <p class="text-teal-50/90 text-sm md:text-base mt-1">
+                        السجل الكامل للموظفين وحالة التسجيل المهني
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 flex-wrap justify-center">
+                <a href="/index.html" class="btn-ghost !border-white/30 !bg-white/15 !text-white hover:!bg-white/25 backdrop-blur">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>التحقق من التسجيل</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Deadline chip -->
+        <div class="relative z-10 mt-5 flex flex-wrap items-center gap-3">
+            <span class="inline-flex items-center gap-2 bg-white/15 backdrop-blur border border-white/25 rounded-full px-4 py-1.5 text-sm font-semibold">
+                <i class="fas fa-calendar-alt"></i>
+                آخر موعد للتسجيل: <span id="deadlineChip" class="font-extrabold">—</span>
+            </span>
+            <span class="inline-flex items-center gap-2 bg-white/15 backdrop-blur border border-white/25 rounded-full px-4 py-1.5 text-sm font-semibold">
+                <i class="fas fa-database"></i>
+                آخر تحديث: <span id="lastUpdate" class="font-extrabold">—</span>
+            </span>
+        </div>
+    </header>
+
+    <!-- ==================== STATS ==================== -->
+    <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
+        <div class="stat-box flex items-center gap-3">
+            <div class="stat-icon bg-teal-50 text-teal-600"><i class="fas fa-users"></i></div>
+            <div>
+                <div class="text-2xl font-extrabold text-slate-800" id="statTotal">0</div>
+                <div class="text-xs text-slate-500 font-medium">إجمالي الموظفين</div>
+            </div>
+        </div>
+
+        <div class="stat-box flex items-center gap-3">
+            <div class="stat-icon bg-emerald-50 text-emerald-600"><i class="fas fa-circle-check"></i></div>
+            <div>
+                <div class="text-2xl font-extrabold text-emerald-600" id="statRegistered">0</div>
+                <div class="text-xs text-slate-500 font-medium">مسجل</div>
+            </div>
+        </div>
+
+        <div class="stat-box flex items-center gap-3">
+            <div class="stat-icon bg-amber-50 text-amber-600"><i class="fas fa-clock"></i></div>
+            <div>
+                <div class="text-2xl font-extrabold text-amber-600" id="statPending">0</div>
+                <div class="text-xs text-slate-500 font-medium">غير مسجل</div>
+            </div>
+        </div>
+
+        <div class="stat-box flex items-center gap-3">
+            <div class="stat-icon bg-sky-50 text-sky-600"><i class="fas fa-chart-line"></i></div>
+            <div class="w-full">
+                <div class="text-2xl font-extrabold text-sky-600" id="statPercent">0%</div>
+                <div class="text-xs text-slate-500 font-medium mb-1.5">نسبة الإنجاز</div>
+                <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div id="miniProgress" class="h-full bg-gradient-to-l from-sky-500 to-teal-400 rounded-full transition-all duration-1000" style="width:0%"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CONTROLS ==================== -->
+    <section class="bg-white rounded-3xl p-4 md:p-5 mb-6 border border-slate-200 shadow-sm">
+        <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
+
+            <!-- Search -->
+            <div class="relative flex-grow">
+                <i class="fas fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" id="searchInput" placeholder="ابحث بالاسم أو الرقم التعريفي (NIN)..." class="search-input" autocomplete="off">
+            </div>
+
+            <!-- Status filter -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0">
+                <button class="filter-chip active" data-status="all" onclick="setStatusFilter('all', this)">
+                    <i class="fas fa-layer-group ml-1"></i> الكل
+                </button>
+                <button class="filter-chip" data-status="registered" onclick="setStatusFilter('registered', this)">
+                    <i class="fas fa-check ml-1"></i> مسجل
+                </button>
+                <button class="filter-chip" data-status="pending" onclick="setStatusFilter('pending', this)">
+                    <i class="fas fa-hourglass-half ml-1"></i> غير مسجل
+                </button>
+            </div>
+
+            <!-- Sort -->
+            <select id="sortSelect" onchange="setSort(this.value)"
+                    class="border-2 border-slate-200 rounded-2xl px-4 py-3 font-semibold text-slate-600 bg-white focus:outline-none focus:border-teal-500 cursor-pointer">
+                <option value="name-asc">الاسم (أ ← ي)</option>
+                <option value="name-desc">الاسم (ي ← أ)</option>
+                <option value="status">حالة التسجيل</option>
+                <option value="nin">الرقم التعريفي</option>
+            </select>
+
+            <!-- Export -->
+            <button class="btn-ghost" onclick="exportCSV()" title="تصدير إلى CSV">
+                <i class="fas fa-file-csv"></i>
+                <span class="hidden sm:inline">تصدير</span>
+            </button>
+        </div>
+
+        <!-- Results meta -->
+        <div class="flex flex-wrap items-center justify-between gap-2 mt-4 pt-4 border-t border-slate-100">
+            <p class="text-sm text-slate-500">
+                يتم عرض <span class="font-bold text-teal-600" id="shownFrom">0</span> –
+                <span class="font-bold text-teal-600" id="shownTo">0</span>
+                من أصل <span class="font-bold text-slate-700" id="filteredCount">0</span> موظف
+            </p>
+            <button id="resetBtn" onclick="resetFilters()" class="text-sm text-slate-400 hover:text-teal-600 font-semibold transition hidden">
+                <i class="fas fa-rotate-left ml-1"></i> إعادة تعيين البحث
+            </button>
+        </div>
+    </section>
+
+    <!-- ==================== RESULTS ==================== -->
+    <section>
+        <!-- Loading -->
+        <div id="loadingState" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+            <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+        </div>
+
+        <!-- Grid -->
+        <div id="employeesGrid" class="hidden grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+        <!-- Empty -->
+        <div id="emptyState" class="hidden text-center py-16 bg-white rounded-3xl border border-slate-200">
+            <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-user-slash text-3xl text-slate-300"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-700 mb-1">لا توجد نتائج</h3>
+            <p class="text-slate-400">جرّب تغيير كلمة البحث أو الفلاتر</p>
+        </div>
+
+        <!-- Error -->
+        <div id="errorState" class="hidden text-center py-16 bg-white rounded-3xl border border-red-100">
+            <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-triangle-exclamation text-3xl text-red-400"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-700 mb-1">تعذّر تحميل البيانات</h3>
+            <p class="text-slate-400 mb-5">حدث خطأ في الاتصال بالخادم، الرجاء المحاولة مجدداً</p>
+            <button class="btn-primary mx-auto" onclick="loadEmployees()">
+                <i class="fas fa-rotate-right"></i><span>إعادة المحاولة</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- ==================== PAGINATION ==================== -->
+    <nav id="pagination" class="flex flex-wrap items-center justify-center gap-2 mt-8"></nav>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="text-center mt-10 mb-4">
+        <p class="text-slate-400 text-sm">
+            <i class="fas fa-shield-halved ml-1 text-teal-500"></i>
+            EPSP Berriane — منصة التحقق من التسجيلات المهنية
+        </p>
+    </footer>
+</div>
+
+<script>
+    // ==================== CONFIGURATION ====================
+    const API_BASE = 'https://cpepspberriane.didcrist.workers.dev';
+    const PAGE_SIZE = 24;
+
+    // ==================== STATE ====================
+    let allEmployees = [];
+    let filtered = [];
+    let currentPage = 1;
+    let statusFilter = 'all';
+    let searchTerm = '';
+    let sortBy = 'name-asc';
+    let deadline = '—';
+
+    const AVATAR_COLORS = [
+        ['#0d9488', '#14b8a6'],
+        ['#0284c7', '#6366f1'],
+        ['#7c3aed', '#a855f7'],
+        ['#d97706', '#f59e0b'],
+        ['#e11d48', '#f43f5e'],
+        ['#0891b2', '#22d3ee'],
+        ['#059669', '#34d399'],
+        ['#4f46e5', '#818cf8']
+    ];
+
+    // ==================== INIT ====================
+    document.addEventListener('DOMContentLoaded', () => {
+        loadDeadline();
+        loadEmployees();
+
+        const searchEl = document.getElementById('searchInput');
+        let debounce;
+        searchEl.addEventListener('input', (e) => {
+            clearTimeout(debounce);
+            const val = e.target.value;
+            debounce = setTimeout(() => {
+                searchTerm = val;
+                applyFilters();
+            }, 220);
+        });
+    });
+
+    // ==================== API ====================
+    async function apiGet(path) {
+        const res = await fetch(`${API_BASE}${path}`, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
+        return res.json();
+    }
+
+    async function loadDeadline() {
+        try {
+            const data = await apiGet('/api/settings/deadline');
+            deadline = data.deadline || '—';
+            document.getElementById('deadlineChip').textContent = deadline;
+        } catch (e) {
+            console.warn('Deadline load failed', e);
+        }
+    }
+
+    async function loadEmployees() {
+        showState('loading');
+        try {
+            const data = await apiGet('/api/employees');
+            allEmployees = Array.isArray(data) ? data : [];
+
+            // أحدث تحديث
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent =
+                now.toLocaleDateString('fr-FR') + ' ' +
+                now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+            renderStats();
+            applyFilters();
+        } catch (e) {
+            console.error(e);
+            showState('error');
+        }
+    }
+
+    // ==================== HELPERS ====================
+    const isRegistered = (emp) => Number(emp.registered) === 1;
+
+    function escapeHtml(str) {
+        return String(str ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function colorFor(str) {
+        let hash = 0;
+        const s = String(str || '?');
+        for (let i = 0; i < s.length; i++) hash = (hash * 31 + s.charCodeAt(i)) >>> 0;
+        return AVATAR_COLORS[hash % AVATAR_COLORS.length];
+    }
+
+    function initialOf(name) {
+        const n = String(name || '').trim();
+        return n ? n.charAt(0) : '?';
+    }
+
+    function formatDate(d) {
+        if (!d) return '';
+        const str = String(d).split('T')[0];
+        return str;
+    }
+
+    // ==================== STATS ====================
+    function renderStats() {
+        const total = allEmployees.length;
+        const registered = allEmployees.filter(isRegistered).length;
+        const pending = total - registered;
+        const percent = total > 0 ? Math.round((registered / total) * 100) : 0;
+
+        document.getElementById('statTotal').textContent = total;
+        document.getElementById('statRegistered').textContent = registered;
+        document.getElementById('statPending').textContent = pending;
+        document.getElementById('statPercent').textContent = percent + '%';
+        document.getElementById('miniProgress').style.width = percent + '%';
+    }
+
+    // ==================== FILTERS ====================
+    function setStatusFilter(status, btn) {
+        statusFilter = status;
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilters();
+    }
+
+    function setSort(value) {
+        sortBy = value;
+        applyFilters();
+    }
+
+    function resetFilters() {
+        searchTerm = '';
+        statusFilter = 'all';
+        sortBy = 'name-asc';
+        document.getElementById('searchInput').value = '';
+        document.getElementById('sortSelect').value = 'name-asc';
+        document.querySelectorAll('.filter-chip').forEach(c => {
+            c.classList.toggle('active', c.dataset.status === 'all');
+        });
+        applyFilters();
+    }
+
+    function applyFilters() {
+        const q = searchTerm.trim().toLowerCase();
+
+        filtered = allEmployees.filter(emp => {
+            if (statusFilter === 'registered' && !isRegistered(emp)) return false;
+            if (statusFilter === 'pending' && isRegistered(emp)) return false;
+            if (!q) return true;
+            const name = String(emp.name || '').toLowerCase();
+            const nin = String(emp.nin || '').toLowerCase();
+            return name.includes(q) || nin.includes(q);
+        });
+
+        // Sorting
+        filtered.sort((a, b) => {
+            switch (sortBy) {
+                case 'name-desc':
+                    return String(b.name || '').localeCompare(String(a.name || ''), 'ar');
+                case 'status': {
+                    const diff = Number(isRegistered(b)) - Number(isRegistered(a));
+                    if (diff !== 0) return diff;
+                    return String(a.name || '').localeCompare(String(b.name || ''), 'ar');
+                }
+                case 'nin':
+                    return String(a.nin || '').localeCompare(String(b.nin || ''), 'en');
+                case 'name-asc':
+                default:
+                    return String(a.name || '').localeCompare(String(b.name || ''), 'ar');
+            }
+        });
+
+        // Toggle reset button
+        document.getElementById('resetBtn').classList.toggle(
+            'hidden',
+            !searchTerm && statusFilter === 'all' && sortBy === 'name-asc'
+        );
+
+        currentPage = 1;
+        render();
+    }
+
+    // ==================== RENDER ====================
+    function render() {
+        const grid = document.getElementById('employeesGrid');
+        const total = filtered.length;
+
+        document.getElementById('filteredCount').textContent = total;
+
+        if (total === 0) {
+            showState('empty');
+            document.getElementById('pagination').innerHTML = '';
+            document.getElementById('shownFrom').textContent = '0';
+            document.getElementById('shownTo').textContent = '0';
+            return;
+        }
+
+        const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const pageItems = filtered.slice(start, start + PAGE_SIZE);
+
+        document.getElementById('shownFrom').textContent = start + 1;
+        document.getElementById('shownTo').textContent = start + pageItems.length;
+
+        grid.innerHTML = pageItems.map((emp, i) => {
+            const reg = isRegistered(emp);
+            const [c1, c2] = colorFor(emp.name || emp.nin);
+            const dateStr = formatDate(emp.date_registered);
+
+            return `
+                <article class="emp-card ${reg ? 'is-registered' : 'is-pending'} fade-in"
+                         style="animation-delay:${Math.min(i * 18, 300)}ms">
+                    <div class="flex items-start gap-3">
+                        <div class="avatar" style="background:linear-gradient(135deg, ${c1}, ${c2})">
+                            ${escapeHtml(initialOf(emp.name))}
+                        </div>
+                        <div class="flex-1 min-w-0 pt-0.5">
+                            <h3 class="font-bold text-slate-800 text-base leading-snug truncate"
+                                title="${escapeHtml(emp.name)}">
+                                ${escapeHtml(emp.name || 'بدون اسم')}
+                            </h3>
+                            <p class="font-mono text-[0.78rem] text-slate-400 mt-0.5 tracking-wide" dir="ltr">
+                                ${escapeHtml(emp.nin || '—')}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between mt-3.5 pt-3 border-t border-slate-100">
+                        ${reg
+                            ? `<span class="badge badge-success"><i class="fas fa-circle-check"></i> مسجل</span>`
+                            : `<span class="badge badge-warning"><i class="fas fa-hourglass-half"></i> غير مسجل</span>`
+                        }
+                        <span class="text-[0.72rem] text-slate-400 font-medium">
+                            ${dateStr
+                                ? `<i class="far fa-calendar-check ml-1"></i>${escapeHtml(dateStr)}`
+                                : `<i class="far fa-calendar ml-1"></i>—`
+                            }
+                        </span>
+                    </div>
+                </article>
+            `;
+        }).join('');
+
+        showState('grid');
+        renderPagination(totalPages);
+    }
+
+    function showState(state) {
+        document.getElementById('loadingState').classList.toggle('hidden', state !== 'loading');
+        document.getElementById('loadingState').classList.toggle('grid', state === 'loading');
+        document.getElementById('employeesGrid').classList.toggle('hidden', state !== 'grid');
+        document.getElementById('employeesGrid').classList.toggle('grid', state === 'grid');
+        document.getElementById('emptyState').classList.toggle('hidden', state !== 'empty');
+        document.getElementById('errorState').classList.toggle('hidden', state !== 'error');
+    }
+
+    // ==================== PAGINATION ====================
+    function pageNumbers(current, total) {
+        const delta = 1;
+        const range = [];
+        const rangeWithDots = [];
+        let l;
+
+        for (let i = 1; i <= total; i++) {
+            if (i === 1 || i === total || (i >= current - delta && i <= current + delta)) {
+                range.push(i);
+            }
+        }
+
+        for (const i of range) {
+            if (l) {
+                if (i - l === 2) rangeWithDots.push(l + 1);
+                else if (i - l !== 1) rangeWithDots.push('...');
+            }
+            rangeWithDots.push(i);
+            l = i;
+        }
+        return rangeWithDots;
+    }
+
+    function renderPagination(totalPages) {
+        const el = document.getElementById('pagination');
+        if (totalPages <= 1) { el.innerHTML = ''; return; }
+
+        let html = '';
+
+        // Previous (RTL => chevron right)
+        html += `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''}
+                    onclick="goToPage(${currentPage - 1})" title="السابق">
+                    <i class="fas fa-chevron-right text-sm"></i>
+                 </button>`;
+
+        pageNumbers(currentPage, totalPages).forEach(p => {
+            if (p === '...') {
+                html += `<span class="px-1 text-slate-400 font-bold">…</span>`;
+            } else {
+                html += `<button class="page-btn ${p === currentPage ? 'active' : ''}"
+                            onclick="goToPage(${p})">${p}</button>`;
+            }
+        });
+
+        // Next
+        html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''}
+                    onclick="goToPage(${currentPage + 1})" title="التالي">
+                    <i class="fas fa-chevron-left text-sm"></i>
+                 </button>`;
+
+        el.innerHTML = html;
+    }
+
+    function goToPage(page) {
+        const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+        if (page < 1 || page > totalPages || page === currentPage) return;
+        currentPage = page;
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==================== EXPORT CSV ====================
+    function exportCSV() {
+        if (filtered.length === 0) {
+            alert('لا توجد بيانات للتصدير');
+            return;
+        }
+
+        const rows = [['NIN', 'الاسم الكامل', 'الحالة', 'تاريخ التسجيل']];
+        filtered.forEach(emp => {
+            rows.push([
+                emp.nin || '',
+                emp.name || '',
+                isRegistered(emp) ? 'مسجل' : 'غير مسجل',
+                formatDate(emp.date_registered) || ''
+            ]);
+        });
+
+        const csv = rows
+            .map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+            .join('\n');
+
+        // BOM for correct Arabic in Excel
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `EPSP_Berriane_Employes_${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+    }
+</script>
+
+</body>
+</html>
