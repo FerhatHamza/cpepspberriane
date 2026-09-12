@@ -14,6 +14,95 @@
         * { font-family: 'Tajawal', sans-serif; }
         body { background: #f1f5f9; min-height: 100vh; }
 
+        /* ---------- Password Gate ---------- */
+        .auth-gate {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            background: linear-gradient(135deg, #0f172a 0%, #134e4a 55%, #0d9488 100%);
+            overflow: hidden;
+        }
+        .auth-gate::after {
+            content: "";
+            position: absolute;
+            width: 420px; height: 420px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+            top: -170px; left: -120px;
+        }
+        .auth-gate::before {
+            content: "";
+            position: absolute;
+            width: 300px; height: 300px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            bottom: -150px; right: -90px;
+        }
+        .auth-card {
+            position: relative;
+            z-index: 2;
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(14px);
+            border-radius: 2rem;
+            padding: 2.25rem 2rem;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 35px 70px -25px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+        .lock-circle {
+            width: 5rem; height: 5rem;
+            border-radius: 1.6rem;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #0d9488, #14b8a6);
+            color: white;
+            font-size: 2rem;
+            margin: 0 auto 1.25rem;
+            box-shadow: 0 18px 35px -14px rgba(13,148,136,0.9);
+        }
+        .auth-input {
+            border: 2px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 1rem 3rem 1rem 3rem;
+            width: 100%;
+            font-size: 1.05rem;
+            transition: all .3s;
+            background: #f8fafc;
+            text-align: center;
+            letter-spacing: .12em;
+        }
+        .auth-input:focus {
+            outline: none;
+            border-color: #0d9488;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(13,148,136,.12);
+        }
+        .eye-btn {
+            position: absolute;
+            left: .9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: .35rem;
+            transition: color .2s;
+        }
+        .eye-btn:hover { color: #0d9488; }
+
+        .shake { animation: shake .45s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake {
+            10%, 90% { transform: translateX(-2px); }
+            20%, 80% { transform: translateX(4px); }
+            30%, 50%, 70% { transform: translateX(-7px); }
+            40%, 60% { transform: translateX(7px); }
+        }
+
         /* ---------- Header ---------- */
         .page-header {
             background: linear-gradient(135deg, #0f766e 0%, #0d9488 55%, #14b8a6 100%);
@@ -197,7 +286,6 @@
         }
         @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
 
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 9px; height: 9px; }
         ::-webkit-scrollbar-track { background: #eef2f7; }
         ::-webkit-scrollbar-thumb { background: #99f6e4; border-radius: 9px; }
@@ -206,185 +294,231 @@
 </head>
 <body class="p-4 md:p-6 lg:p-8">
 
-<div class="max-w-6xl mx-auto">
-
-    <!-- ==================== HEADER ==================== -->
-    <header class="page-header p-6 md:p-8 mb-6 text-white">
-        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-5">
-            <div class="flex items-center gap-4 text-center md:text-right flex-col md:flex-row">
-                <div class="bg-white/15 backdrop-blur rounded-2xl p-3 border border-white/20">
-                    <img src="/epsplogo.png" alt="EPSP Berriane" class="h-14 w-auto object-contain">
-                </div>
-                <div>
-                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">
-                        قائمة الموظفين <span class="text-teal-100">| EPSP Berriane</span>
-                    </h1>
-                    <p class="text-teal-50/90 text-sm md:text-base mt-1">
-                        السجل الكامل للموظفين وحالة التسجيل المهني
-                    </p>
-                </div>
-            </div>
-
-            <div class="flex items-center gap-2 flex-wrap justify-center">
-                <a href="/index.html" class="btn-ghost !border-white/30 !bg-white/15 !text-white hover:!bg-white/25 backdrop-blur">
-                    <i class="fas fa-arrow-right"></i>
-                    <span>التحقق من التسجيل</span>
-                </a>
-            </div>
+<!-- ==================== PASSWORD GATE ==================== -->
+<div id="authGate" class="auth-gate">
+    <div class="auth-card" id="authCard">
+        <div class="lock-circle">
+            <i class="fas fa-lock"></i>
         </div>
 
-        <!-- Deadline chip -->
-        <div class="relative z-10 mt-5 flex flex-wrap items-center gap-3">
-            <span class="inline-flex items-center gap-2 bg-white/15 backdrop-blur border border-white/25 rounded-full px-4 py-1.5 text-sm font-semibold">
-                <i class="fas fa-calendar-alt"></i>
-                آخر موعد للتسجيل: <span id="deadlineChip" class="font-extrabold">—</span>
-            </span>
-            <span class="inline-flex items-center gap-2 bg-white/15 backdrop-blur border border-white/25 rounded-full px-4 py-1.5 text-sm font-semibold">
-                <i class="fas fa-database"></i>
-                آخر تحديث: <span id="lastUpdate" class="font-extrabold">—</span>
-            </span>
-        </div>
-    </header>
-
-    <!-- ==================== STATS ==================== -->
-    <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
-        <div class="stat-box flex items-center gap-3">
-            <div class="stat-icon bg-teal-50 text-teal-600"><i class="fas fa-users"></i></div>
-            <div>
-                <div class="text-2xl font-extrabold text-slate-800" id="statTotal">0</div>
-                <div class="text-xs text-slate-500 font-medium">إجمالي الموظفين</div>
-            </div>
-        </div>
-
-        <div class="stat-box flex items-center gap-3">
-            <div class="stat-icon bg-emerald-50 text-emerald-600"><i class="fas fa-circle-check"></i></div>
-            <div>
-                <div class="text-2xl font-extrabold text-emerald-600" id="statRegistered">0</div>
-                <div class="text-xs text-slate-500 font-medium">مسجل</div>
-            </div>
-        </div>
-
-        <div class="stat-box flex items-center gap-3">
-            <div class="stat-icon bg-amber-50 text-amber-600"><i class="fas fa-clock"></i></div>
-            <div>
-                <div class="text-2xl font-extrabold text-amber-600" id="statPending">0</div>
-                <div class="text-xs text-slate-500 font-medium">غير مسجل</div>
-            </div>
-        </div>
-
-        <div class="stat-box flex items-center gap-3">
-            <div class="stat-icon bg-sky-50 text-sky-600"><i class="fas fa-chart-line"></i></div>
-            <div class="w-full">
-                <div class="text-2xl font-extrabold text-sky-600" id="statPercent">0%</div>
-                <div class="text-xs text-slate-500 font-medium mb-1.5">نسبة الإنجاز</div>
-                <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div id="miniProgress" class="h-full bg-gradient-to-l from-sky-500 to-teal-400 rounded-full transition-all duration-1000" style="width:0%"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==================== CONTROLS ==================== -->
-    <section class="bg-white rounded-3xl p-4 md:p-5 mb-6 border border-slate-200 shadow-sm">
-        <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
-
-            <!-- Search -->
-            <div class="relative flex-grow">
-                <i class="fas fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="text" id="searchInput" placeholder="ابحث بالاسم أو الرقم التعريفي (NIN)..." class="search-input" autocomplete="off">
-            </div>
-
-            <!-- Status filter -->
-            <div class="flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0">
-                <button class="filter-chip active" data-status="all" onclick="setStatusFilter('all', this)">
-                    <i class="fas fa-layer-group ml-1"></i> الكل
-                </button>
-                <button class="filter-chip" data-status="registered" onclick="setStatusFilter('registered', this)">
-                    <i class="fas fa-check ml-1"></i> مسجل
-                </button>
-                <button class="filter-chip" data-status="pending" onclick="setStatusFilter('pending', this)">
-                    <i class="fas fa-hourglass-half ml-1"></i> غير مسجل
-                </button>
-            </div>
-
-            <!-- Sort -->
-            <select id="sortSelect" onchange="setSort(this.value)"
-                    class="border-2 border-slate-200 rounded-2xl px-4 py-3 font-semibold text-slate-600 bg-white focus:outline-none focus:border-teal-500 cursor-pointer">
-                <option value="name-asc">الاسم (أ ← ي)</option>
-                <option value="name-desc">الاسم (ي ← أ)</option>
-                <option value="status">حالة التسجيل</option>
-                <option value="nin">الرقم التعريفي</option>
-            </select>
-
-            <!-- Export -->
-            <button class="btn-ghost" onclick="exportCSV()" title="تصدير إلى CSV">
-                <i class="fas fa-file-csv"></i>
-                <span class="hidden sm:inline">تصدير</span>
-            </button>
-        </div>
-
-        <!-- Results meta -->
-        <div class="flex flex-wrap items-center justify-between gap-2 mt-4 pt-4 border-t border-slate-100">
-            <p class="text-sm text-slate-500">
-                يتم عرض <span class="font-bold text-teal-600" id="shownFrom">0</span> –
-                <span class="font-bold text-teal-600" id="shownTo">0</span>
-                من أصل <span class="font-bold text-slate-700" id="filteredCount">0</span> موظف
-            </p>
-            <button id="resetBtn" onclick="resetFilters()" class="text-sm text-slate-400 hover:text-teal-600 font-semibold transition hidden">
-                <i class="fas fa-rotate-left ml-1"></i> إعادة تعيين البحث
-            </button>
-        </div>
-    </section>
-
-    <!-- ==================== RESULTS ==================== -->
-    <section>
-        <!-- Loading -->
-        <div id="loadingState" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
-            <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
-        </div>
-
-        <!-- Grid -->
-        <div id="employeesGrid" class="hidden grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-
-        <!-- Empty -->
-        <div id="emptyState" class="hidden text-center py-16 bg-white rounded-3xl border border-slate-200">
-            <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-user-slash text-3xl text-slate-300"></i>
-            </div>
-            <h3 class="text-xl font-bold text-slate-700 mb-1">لا توجد نتائج</h3>
-            <p class="text-slate-400">جرّب تغيير كلمة البحث أو الفلاتر</p>
-        </div>
-
-        <!-- Error -->
-        <div id="errorState" class="hidden text-center py-16 bg-white rounded-3xl border border-red-100">
-            <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-triangle-exclamation text-3xl text-red-400"></i>
-            </div>
-            <h3 class="text-xl font-bold text-slate-700 mb-1">تعذّر تحميل البيانات</h3>
-            <p class="text-slate-400 mb-5">حدث خطأ في الاتصال بالخادم، الرجاء المحاولة مجدداً</p>
-            <button class="btn-primary mx-auto" onclick="loadEmployees()">
-                <i class="fas fa-rotate-right"></i><span>إعادة المحاولة</span>
-            </button>
-        </div>
-    </section>
-
-    <!-- ==================== PAGINATION ==================== -->
-    <nav id="pagination" class="flex flex-wrap items-center justify-center gap-2 mt-8"></nav>
-
-    <!-- ==================== FOOTER ==================== -->
-    <footer class="text-center mt-10 mb-4">
-        <p class="text-slate-400 text-sm">
-            <i class="fas fa-shield-halved ml-1 text-teal-500"></i>
-            EPSP Berriane — منصة التحقق من التسجيلات المهنية
+        <h1 class="text-2xl font-extrabold text-slate-800 text-center mb-1">
+            منطقة محمية
+        </h1>
+        <p class="text-slate-500 text-center text-sm mb-6">
+            يرجى إدخال كلمة المرور للوصول إلى قائمة الموظفين
         </p>
-    </footer>
+
+        <div class="relative mb-4">
+            <input type="password" id="gatePassword"
+                   class="auth-input"
+                   placeholder="••••••••"
+                   autocomplete="current-password"
+                   onkeypress="if(event.key==='Enter') verifyPassword()">
+            <button type="button" class="eye-btn" onclick="togglePasswordVisibility()" tabindex="-1">
+                <i id="eyeIcon" class="fas fa-eye"></i>
+            </button>
+        </div>
+
+        <p id="gateError" class="hidden text-red-500 text-sm font-semibold text-center mb-4">
+            <i class="fas fa-circle-exclamation ml-1"></i>
+            كلمة المرور غير صحيحة، حاول مرة أخرى
+        </p>
+
+        <button onclick="verifyPassword()" class="btn-primary w-full !py-3.5">
+            <i class="fas fa-unlock"></i>
+            <span>دخول</span>
+        </button>
+
+        <p class="text-center text-xs text-slate-400 mt-5">
+            <i class="fas fa-shield-halved ml-1"></i>
+            EPSP Berriane — وصول مقيّد
+        </p>
+    </div>
+</div>
+
+<!-- ==================== MAIN CONTENT ==================== -->
+<div id="mainContent" class="hidden">
+    <div class="max-w-6xl mx-auto">
+
+        <!-- ---------- HEADER ---------- -->
+        <header class="page-header p-6 md:p-8 mb-6 text-white">
+            <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-5">
+                <div class="flex items-center gap-4 text-center md:text-right flex-col md:flex-row">
+                    <div class="bg-white/15 backdrop-blur rounded-2xl p-3 border border-white/20">
+                        <img src="/epsplogo.png" alt="EPSP Berriane" class="h-14 w-auto object-contain">
+                    </div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">
+                            قائمة الموظفين <span class="text-teal-100">| EPSP Berriane</span>
+                        </h1>
+                        <p class="text-teal-50/90 text-sm md:text-base mt-1">
+                            السجل الكامل للموظفين وحالة التسجيل المهني
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 flex-wrap justify-center">
+                    <a href="/index.html" class="btn-ghost !border-white/30 !bg-white/15 !text-white hover:!bg-white/25 backdrop-blur">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>التحقق من التسجيل</span>
+                    </a>
+                    <button onclick="logout()" class="btn-ghost !border-red-200/40 !bg-red-500/20 !text-white hover:!bg-red-500/40 backdrop-blur" title="تسجيل الخروج">
+                        <i class="fas fa-right-from-bracket"></i>
+                        <span class="hidden sm:inline">خروج</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Deadline chip -->
+            <div class="relative z-10 mt-5 flex flex-wrap items-center gap-3">
+                <span class="inline-flex items-center gap-2 bg-white/15 backdrop-blur border border-white/25 rounded-full px-4 py-1.5 text-sm font-semibold">
+                    <i class="fas fa-calendar-alt"></i>
+                    آخر موعد للتسجيل: <span id="deadlineChip" class="font-extrabold">—</span>
+                </span>
+                <span class="inline-flex items-center gap-2 bg-white/15 backdrop-blur border border-white/25 rounded-full px-4 py-1.5 text-sm font-semibold">
+                    <i class="fas fa-database"></i>
+                    آخر تحديث: <span id="lastUpdate" class="font-extrabold">—</span>
+                </span>
+            </div>
+        </header>
+
+        <!-- ---------- STATS ---------- -->
+        <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
+            <div class="stat-box flex items-center gap-3">
+                <div class="stat-icon bg-teal-50 text-teal-600"><i class="fas fa-users"></i></div>
+                <div>
+                    <div class="text-2xl font-extrabold text-slate-800" id="statTotal">0</div>
+                    <div class="text-xs text-slate-500 font-medium">إجمالي الموظفين</div>
+                </div>
+            </div>
+
+            <div class="stat-box flex items-center gap-3">
+                <div class="stat-icon bg-emerald-50 text-emerald-600"><i class="fas fa-circle-check"></i></div>
+                <div>
+                    <div class="text-2xl font-extrabold text-emerald-600" id="statRegistered">0</div>
+                    <div class="text-xs text-slate-500 font-medium">مسجل</div>
+                </div>
+            </div>
+
+            <div class="stat-box flex items-center gap-3">
+                <div class="stat-icon bg-amber-50 text-amber-600"><i class="fas fa-clock"></i></div>
+                <div>
+                    <div class="text-2xl font-extrabold text-amber-600" id="statPending">0</div>
+                    <div class="text-xs text-slate-500 font-medium">غير مسجل</div>
+                </div>
+            </div>
+
+            <div class="stat-box flex items-center gap-3">
+                <div class="stat-icon bg-sky-50 text-sky-600"><i class="fas fa-chart-line"></i></div>
+                <div class="w-full">
+                    <div class="text-2xl font-extrabold text-sky-600" id="statPercent">0%</div>
+                    <div class="text-xs text-slate-500 font-medium mb-1.5">نسبة الإنجاز</div>
+                    <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="miniProgress" class="h-full bg-gradient-to-l from-sky-500 to-teal-400 rounded-full transition-all duration-1000" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ---------- CONTROLS ---------- -->
+        <section class="bg-white rounded-3xl p-4 md:p-5 mb-6 border border-slate-200 shadow-sm">
+            <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
+
+                <div class="relative flex-grow">
+                    <i class="fas fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="searchInput" placeholder="ابحث بالاسم أو الرقم التعريفي (NIN)..." class="search-input" autocomplete="off">
+                </div>
+
+                <div class="flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0">
+                    <button class="filter-chip active" data-status="all" onclick="setStatusFilter('all', this)">
+                        <i class="fas fa-layer-group ml-1"></i> الكل
+                    </button>
+                    <button class="filter-chip" data-status="registered" onclick="setStatusFilter('registered', this)">
+                        <i class="fas fa-check ml-1"></i> مسجل
+                    </button>
+                    <button class="filter-chip" data-status="pending" onclick="setStatusFilter('pending', this)">
+                        <i class="fas fa-hourglass-half ml-1"></i> غير مسجل
+                    </button>
+                </div>
+
+                <select id="sortSelect" onchange="setSort(this.value)"
+                        class="border-2 border-slate-200 rounded-2xl px-4 py-3 font-semibold text-slate-600 bg-white focus:outline-none focus:border-teal-500 cursor-pointer">
+                    <option value="name-asc">الاسم (أ ← ي)</option>
+                    <option value="name-desc">الاسم (ي ← أ)</option>
+                    <option value="status">حالة التسجيل</option>
+                    <option value="nin">الرقم التعريفي</option>
+                </select>
+
+                <button class="btn-ghost" onclick="exportCSV()" title="تصدير إلى CSV">
+                    <i class="fas fa-file-csv"></i>
+                    <span class="hidden sm:inline">تصدير</span>
+                </button>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-2 mt-4 pt-4 border-t border-slate-100">
+                <p class="text-sm text-slate-500">
+                    يتم عرض <span class="font-bold text-teal-600" id="shownFrom">0</span> –
+                    <span class="font-bold text-teal-600" id="shownTo">0</span>
+                    من أصل <span class="font-bold text-slate-700" id="filteredCount">0</span> موظف
+                </p>
+                <button id="resetBtn" onclick="resetFilters()" class="text-sm text-slate-400 hover:text-teal-600 font-semibold transition hidden">
+                    <i class="fas fa-rotate-left ml-1"></i> إعادة تعيين البحث
+                </button>
+            </div>
+        </section>
+
+        <!-- ---------- RESULTS ---------- -->
+        <section>
+            <div id="loadingState" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+                <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+            </div>
+
+            <div id="employeesGrid" class="hidden grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+            <div id="emptyState" class="hidden text-center py-16 bg-white rounded-3xl border border-slate-200">
+                <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-user-slash text-3xl text-slate-300"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-700 mb-1">لا توجد نتائج</h3>
+                <p class="text-slate-400">جرّب تغيير كلمة البحث أو الفلاتر</p>
+            </div>
+
+            <div id="errorState" class="hidden text-center py-16 bg-white rounded-3xl border border-red-100">
+                <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-triangle-exclamation text-3xl text-red-400"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-700 mb-1">تعذّر تحميل البيانات</h3>
+                <p class="text-slate-400 mb-5">حدث خطأ في الاتصال بالخادم، الرجاء المحاولة مجدداً</p>
+                <button class="btn-primary mx-auto" onclick="loadEmployees()">
+                    <i class="fas fa-rotate-right"></i><span>إعادة المحاولة</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ---------- PAGINATION ---------- -->
+        <nav id="pagination" class="flex flex-wrap items-center justify-center gap-2 mt-8"></nav>
+
+        <!-- ---------- FOOTER ---------- -->
+        <footer class="text-center mt-10 mb-4">
+            <p class="text-slate-400 text-sm">
+                <i class="fas fa-shield-halved ml-1 text-teal-500"></i>
+                EPSP Berriane — منصة التحقق من التسجيلات المهنية
+            </p>
+        </footer>
+    </div>
 </div>
 
 <script>
     // ==================== CONFIGURATION ====================
     const API_BASE = 'https://cpepspberriane.didcrist.workers.dev';
     const PAGE_SIZE = 24;
+
+    // 🔐 كلمة المرور للوصول إلى هذه الصفحة — غيّرها من هنا
+    const ACCESS_PASSWORD = 'admin123';
+
+    // مفتاح الجلسة (لا تشاركه مع index.html حتى لا تختلط الجلسات)
+    const SESSION_KEY = 'epsp_emploi_auth';
 
     // ==================== STATE ====================
     let allEmployees = [];
@@ -394,6 +528,7 @@
     let searchTerm = '';
     let sortBy = 'name-asc';
     let deadline = '—';
+    let isUnlocked = false;
 
     const AVATAR_COLORS = [
         ['#0d9488', '#14b8a6'],
@@ -406,10 +541,59 @@
         ['#4f46e5', '#818cf8']
     ];
 
-    // ==================== INIT ====================
-    document.addEventListener('DOMContentLoaded', () => {
+    // ==================== AUTH ====================
+    function togglePasswordVisibility() {
+        const input = document.getElementById('gatePassword');
+        const icon = document.getElementById('eyeIcon');
+        const isHidden = input.type === 'password';
+        input.type = isHidden ? 'text' : 'password';
+        icon.className = isHidden ? 'fas fa-eye-slash' : 'fas fa-eye';
+    }
+
+    function verifyPassword() {
+        const input = document.getElementById('gatePassword');
+        const errorEl = document.getElementById('gateError');
+        const card = document.getElementById('authCard');
+
+        if (input.value === ACCESS_PASSWORD) {
+            sessionStorage.setItem(SESSION_KEY, '1');
+            unlockApp();
+        } else {
+            errorEl.classList.remove('hidden');
+            card.classList.remove('shake');
+            // إعادة تشغيل الأنيميشن
+            void card.offsetWidth;
+            card.classList.add('shake');
+            input.value = '';
+            input.focus();
+        }
+    }
+
+    function unlockApp() {
+        isUnlocked = true;
+        document.getElementById('authGate').style.display = 'none';
+        document.getElementById('mainContent').classList.remove('hidden');
+
+        // تحميل البيانات لأول مرة
         loadDeadline();
         loadEmployees();
+    }
+
+    function logout() {
+        if (!confirm('هل تريد تسجيل الخروج من هذه الصفحة؟')) return;
+        sessionStorage.removeItem(SESSION_KEY);
+        location.reload();
+    }
+
+    // ==================== INIT ====================
+    document.addEventListener('DOMContentLoaded', () => {
+        // إذا كان مسجلاً بالفعل في هذه الجلسة
+        if (sessionStorage.getItem(SESSION_KEY) === '1') {
+            unlockApp();
+        } else {
+            // التركيز على حقل كلمة المرور
+            setTimeout(() => document.getElementById('gatePassword').focus(), 150);
+        }
 
         const searchEl = document.getElementById('searchInput');
         let debounce;
@@ -443,12 +627,12 @@
     }
 
     async function loadEmployees() {
+        if (!isUnlocked) return;
         showState('loading');
         try {
             const data = await apiGet('/api/employees');
             allEmployees = Array.isArray(data) ? data : [];
 
-            // أحدث تحديث
             const now = new Date();
             document.getElementById('lastUpdate').textContent =
                 now.toLocaleDateString('fr-FR') + ' ' +
@@ -488,8 +672,7 @@
 
     function formatDate(d) {
         if (!d) return '';
-        const str = String(d).split('T')[0];
-        return str;
+        return String(d).split('T')[0];
     }
 
     // ==================== STATS ====================
@@ -543,7 +726,6 @@
             return name.includes(q) || nin.includes(q);
         });
 
-        // Sorting
         filtered.sort((a, b) => {
             switch (sortBy) {
                 case 'name-desc':
@@ -561,7 +743,6 @@
             }
         });
 
-        // Toggle reset button
         document.getElementById('resetBtn').classList.toggle(
             'hidden',
             !searchTerm && statusFilter === 'all' && sortBy === 'name-asc'
@@ -677,7 +858,6 @@
 
         let html = '';
 
-        // Previous (RTL => chevron right)
         html += `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''}
                     onclick="goToPage(${currentPage - 1})" title="السابق">
                     <i class="fas fa-chevron-right text-sm"></i>
@@ -692,7 +872,6 @@
             }
         });
 
-        // Next
         html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''}
                     onclick="goToPage(${currentPage + 1})" title="التالي">
                     <i class="fas fa-chevron-left text-sm"></i>
@@ -730,7 +909,6 @@
             .map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
             .join('\n');
 
-        // BOM for correct Arabic in Excel
         const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
