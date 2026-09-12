@@ -6,7 +6,7 @@
 <title>EPSP Berriane — سجل الموظفين</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
 :root{
@@ -35,9 +35,9 @@ html{scroll-behavior:smooth}
 body{
     background:var(--cloud);
     color:var(--ink-navy);
-    font-family:'IBM Plex Sans Arabic','Manrope',system-ui,sans-serif;
+    font-family:'Tajawal',system-ui,sans-serif;
     font-size:16px;
-    line-height:1.5;
+    line-height:1.6;
     -webkit-font-smoothing:antialiased;
     min-height:100vh;
     overflow-x:hidden;
@@ -52,7 +52,6 @@ body{
     overflow:hidden;
 }
 
-/* Decorative blobs */
 .gate::before{
     content:"";position:absolute;
     width:520px;height:520px;
@@ -85,8 +84,8 @@ body{
     display:inline-flex;align-items:center;gap:0.5rem;
     background:#e6f0ff;
     color:var(--deep-cobalt);
-    font-family:'Manrope',sans-serif;
-    font-size:12px;
+    font-family:'Tajawal',sans-serif;
+    font-size:13px;
     font-weight:500;
     padding:5px 12px;
     border-radius:50px;
@@ -95,28 +94,29 @@ body{
 .gate-badge i{font-size:11px}
 
 .gate-title{
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:38px;
-    font-weight:700;
+    font-weight:800;
     line-height:1.15;
-    letter-spacing:-0.02em;
+    letter-spacing:-0.01em;
     color:var(--ink-navy);
-    margin-bottom:0.65rem;
+    margin-bottom:0.6rem;
 }
 .gate-title span{color:var(--signal-blue)}
 
 .gate-sub{
     color:var(--slate-gray);
     font-size:16px;
-    line-height:1.55;
+    line-height:1.6;
+    font-weight:400;
     margin-bottom:2rem;
 }
 
 .field{margin-bottom:1.15rem}
 .field-label{
     display:block;
-    font-family:'Manrope',sans-serif;
-    font-size:14px;
+    font-family:'Tajawal',sans-serif;
+    font-size:15px;
     font-weight:500;
     color:var(--ink-navy);
     margin-bottom:0.6rem;
@@ -131,9 +131,10 @@ body{
     border-radius:8px;
     color:var(--ink-navy);
     padding:0.85rem 1rem 0.85rem 3rem;
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:16px;
-    letter-spacing:0.15em;
+    font-weight:500;
+    letter-spacing:0.2em;
     transition:all 0.2s;
 }
 .field-input:focus{
@@ -144,7 +145,7 @@ body{
 }
 .field-input::placeholder{
     color:var(--mist-gray);
-    letter-spacing:0.3em;
+    letter-spacing:0.4em;
 }
 
 .eye{
@@ -160,7 +161,7 @@ body{
 
 .err{
     display:none;
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:14px;
     font-weight:500;
     color:#d92d20;
@@ -180,9 +181,9 @@ body{
     border:none;
     border-radius:8px;
     padding:0.95rem 1.5rem;
-    font-family:'Manrope',sans-serif;
-    font-size:18px;
-    font-weight:600;
+    font-family:'Tajawal',sans-serif;
+    font-size:17px;
+    font-weight:700;
     cursor:pointer;
     transition:all 0.2s;
     display:flex;align-items:center;justify-content:center;gap:0.6rem;
@@ -199,8 +200,8 @@ body{
     display:flex;justify-content:space-between;
     margin-top:1.75rem;padding-top:1.35rem;
     border-top:1px solid var(--hairline);
-    font-family:'Manrope',sans-serif;
-    font-size:12px;
+    font-family:'Tajawal',sans-serif;
+    font-size:13px;
     font-weight:500;
     color:var(--mist-gray);
 }
@@ -239,8 +240,8 @@ body{
     color:var(--paper);
     border-radius:10px;
     display:flex;align-items:center;justify-content:center;
-    font-family:'Manrope',sans-serif;
-    font-weight:800;
+    font-family:'Tajawal',sans-serif;
+    font-weight:900;
     font-size:1.15rem;
     flex-shrink:0;
     position:relative;
@@ -255,16 +256,16 @@ body{
 }
 
 .brand-kicker{
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:12px;
-    font-weight:600;
-    letter-spacing:0.08em;
+    font-weight:700;
+    letter-spacing:0.1em;
     text-transform:uppercase;
     color:var(--slate-gray);
     margin-bottom:2px;
 }
 .brand-name{
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:16px;
     font-weight:700;
     color:var(--ink-navy);
@@ -278,9 +279,9 @@ body{
     color:var(--ink-navy);
     padding:0.65rem 1.1rem;
     border-radius:8px;
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:14px;
-    font-weight:600;
+    font-weight:700;
     cursor:pointer;text-decoration:none;
     display:inline-flex;align-items:center;gap:0.5rem;
     transition:all 0.2s;
@@ -323,8 +324,8 @@ body{
     display:inline-flex;align-items:center;gap:0.5rem;
     background:#e6f0ff;
     color:var(--deep-cobalt);
-    font-family:'Manrope',sans-serif;
-    font-size:12px;
+    font-family:'Tajawal',sans-serif;
+    font-size:13px;
     font-weight:500;
     padding:5px 12px;
     border-radius:50px;
@@ -333,11 +334,11 @@ body{
 .mast-badge i{font-size:10px}
 
 .mast-title{
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:clamp(2.4rem,5.5vw,4rem);
-    font-weight:700;
-    line-height:1.08;
-    letter-spacing:-0.025em;
+    font-weight:800;
+    line-height:1.1;
+    letter-spacing:-0.02em;
     color:var(--ink-navy);
     margin-bottom:1rem;
 }
@@ -346,7 +347,8 @@ body{
 .mast-desc{
     color:var(--slate-gray);
     font-size:18px;
-    line-height:1.55;
+    line-height:1.6;
+    font-weight:400;
     max-width:52ch;
 }
 
@@ -370,10 +372,10 @@ body{
 
 .mast-meta-label{
     display:flex;align-items:center;gap:0.55rem;
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:12px;
-    font-weight:600;
-    letter-spacing:0.05em;
+    font-weight:700;
+    letter-spacing:0.04em;
     text-transform:uppercase;
     color:var(--slate-gray);
     margin-bottom:0.4rem;
@@ -381,9 +383,9 @@ body{
 .mast-meta-label i{color:var(--signal-blue);font-size:11px}
 
 .mast-meta-value{
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:20px;
-    font-weight:700;
+    font-weight:800;
     color:var(--ink-navy);
     letter-spacing:-0.01em;
 }
@@ -426,17 +428,17 @@ body{
 .stat-icon.violet{background:#f5f3ff;color:#7c3aed}
 
 .stat-label{
-    font-family:'Manrope',sans-serif;
-    font-size:14px;
+    font-family:'Tajawal',sans-serif;
+    font-size:15px;
     font-weight:500;
     color:var(--slate-gray);
     margin-bottom:0.5rem;
 }
 
 .stat-value{
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:2.25rem;
-    font-weight:700;
+    font-weight:800;
     line-height:1;
     letter-spacing:-0.02em;
     color:var(--ink-navy);
@@ -480,8 +482,9 @@ body{
     border-radius:8px;
     color:var(--ink-navy);
     padding:0.75rem 2.6rem 0.75rem 1.1rem;
-    font-family:'IBM Plex Sans Arabic',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:15px;
+    font-weight:400;
     transition:all 0.2s;
 }
 .search:focus{
@@ -504,9 +507,9 @@ body{
     color:var(--slate-gray);
     padding:0 1.15rem;
     min-height:48px;
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:14px;
-    font-weight:600;
+    font-weight:700;
     cursor:pointer;
     transition:all 0.15s;
     border-left:1px solid var(--hairline);
@@ -529,9 +532,9 @@ body{
     color:var(--ink-navy);
     padding:0 1rem;
     min-height:48px;
-    font-family:'IBM Plex Sans Arabic',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:14px;
-    font-weight:600;
+    font-weight:700;
     cursor:pointer;
     transition:all 0.2s;
 }
@@ -542,7 +545,7 @@ body{
     display:flex;justify-content:space-between;align-items:center;
     padding:0.9rem 0;
     margin-bottom:1.5rem;
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:14px;
     font-weight:500;
     color:var(--slate-gray);
@@ -550,14 +553,14 @@ body{
 }
 .meta-line strong{
     color:var(--ink-navy);
-    font-weight:700;
+    font-weight:800;
     margin:0 3px;
 }
 
 .reset-btn{
     background:none;border:none;
     color:var(--slate-gray);
-    font-family:inherit;font-size:inherit;font-weight:600;
+    font-family:inherit;font-size:inherit;font-weight:700;
     cursor:pointer;padding:0.4rem 0.8rem;
     border-radius:6px;
     transition:all 0.15s;
@@ -593,7 +596,6 @@ body{
     border-color:rgba(0,107,255,0.25);
 }
 
-/* Left accent stripe */
 .card::before{
     content:"";
     position:absolute;
@@ -614,22 +616,20 @@ body{
 }
 
 .card-idx{
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:12px;
-    font-weight:600;
-    letter-spacing:0.08em;
+    font-weight:700;
+    letter-spacing:0.05em;
     color:var(--mist-gray);
-    text-transform:uppercase;
 }
 
 .status-chip{
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:12px;
-    font-weight:600;
+    font-weight:700;
     padding:4px 10px;
     border-radius:50px;
     display:inline-flex;align-items:center;gap:0.4rem;
-    letter-spacing:0.01em;
 }
 .status-chip .dot{
     width:6px;height:6px;border-radius:50%;
@@ -645,11 +645,10 @@ body{
 }
 
 .card-name{
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:20px;
-    font-weight:700;
-    line-height:1.3;
-    letter-spacing:-0.01em;
+    font-weight:800;
+    line-height:1.35;
     color:var(--ink-navy);
     margin-bottom:0.85rem;
     word-break:break-word;
@@ -673,19 +672,16 @@ body{
     margin-top:auto;padding-top:1rem;
     border-top:1px solid var(--hairline);
     display:flex;justify-content:space-between;align-items:center;
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:12px;
-    font-weight:600;
-    letter-spacing:0.03em;
+    font-weight:700;
     color:var(--slate-gray);
-    text-transform:uppercase;
 }
 
 .card-foot .date{
     display:inline-flex;align-items:center;gap:0.45rem;
     color:var(--slate-gray);
-    text-transform:none;
-    letter-spacing:0;
+    font-weight:500;
 }
 
 /* ============ SKELETON ============ */
@@ -726,16 +722,16 @@ body{
     margin-bottom:1.5rem;
 }
 .empty h3{
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:24px;
-    font-weight:700;
-    letter-spacing:-0.01em;
+    font-weight:800;
     color:var(--ink-navy);
     margin-bottom:0.5rem;
 }
 .empty p{
     color:var(--slate-gray);
     font-size:16px;
+    font-weight:400;
     max-width:44ch;
     margin:0 auto 1.75rem;
     line-height:1.6;
@@ -754,9 +750,9 @@ body{
     border:1px solid var(--hairline);
     border-radius:8px;
     color:var(--ink-navy);
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:14px;
-    font-weight:600;
+    font-weight:700;
     cursor:pointer;
     transition:all 0.15s;
     display:inline-flex;align-items:center;justify-content:center;
@@ -775,8 +771,9 @@ body{
 .pg:disabled{opacity:0.35;cursor:not-allowed}
 .pg-dots{
     color:var(--mist-gray);
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:14px;
+    font-weight:700;
     padding:0 0.5rem;
 }
 
@@ -787,12 +784,12 @@ body{
     border-top:1px solid var(--hairline);
     display:flex;justify-content:space-between;align-items:center;
     flex-wrap:wrap;gap:1rem;
-    font-family:'Manrope',sans-serif;
+    font-family:'Tajawal',sans-serif;
     font-size:14px;
     font-weight:500;
     color:var(--slate-gray);
 }
-.foot strong{color:var(--ink-navy);font-weight:700}
+.foot strong{color:var(--ink-navy);font-weight:800}
 
 /* ============ ANIMATIONS ============ */
 .fade{animation:fadeUp 0.45s cubic-bezier(0.4,0,0.2,1) both}
@@ -1009,7 +1006,7 @@ body{
 const API_BASE = 'https://cpepspberriane.didcrist.workers.dev';
 const PAGE_SIZE = 24;
 const PASSWORD = 'admin123';
-const SESSION_KEY = 'epsp_emploi_calendly';
+const SESSION_KEY = 'epsp_emploi_tajawal';
 
 /* ============ STATE ============ */
 let all = [];
