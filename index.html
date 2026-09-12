@@ -3,517 +3,1095 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EPSP Berriane | التحقق من التسجيلات</title>
+    <title>EPSP Berriane | قائمة الموظفين</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tajawal Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Inter:wght@400;500&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * { font-family: 'Tajawal', sans-serif; }
-        body { background: #f8fafc; min-height: 100vh; }
-        
-        /* Professional Cards */
-        .status-card {
-            background: white;
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 40px -15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(226, 232, 240, 0.6);
+        :root {
+            /* Auros-inspired palette */
+            --color-liquid-abyss: #012624;
+            --color-liquid-deep: #011d1c;
+            --color-liquid-kelp: #003734;
+            --color-liquid-mist: #edfffe;
+            --color-platinum: #ffffff;
+            --color-silver-mist: #bbc7c6;
+            --color-ash: #f2f2f2;
+            --color-slate-deep: #707777;
+            --color-lavender-phosphor: #fde9ff;
+            --gradient-bioluminescent: linear-gradient(90deg, rgb(0, 130, 124) 0%, rgb(203, 255, 252) 100%);
+            --gradient-aurora: linear-gradient(90deg, rgb(203, 255, 252) 0%, rgb(237, 255, 254) 26.25%, rgb(255, 253, 250) 47.57%, rgb(250, 209, 255) 88.96%);
         }
-        .status-card:hover {
-            box-shadow: 0 20px 50px -15px rgba(0,150,136,0.2);
-            transform: translateY(-2px);
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: var(--color-liquid-abyss);
+            color: var(--color-platinum);
+            min-height: 100vh;
+            font-family: 'Tajawal', 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
-        
-        /* Professional Input */
-        .professional-input {
-            border: 2px solid #e2e8f0;
-            border-radius: 1rem;
-            padding: 1rem 1.5rem;
-            width: 100%;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-            background: white;
-        }
-        .professional-input:focus {
-            outline: none;
-            border-color: #0d9488;
-            box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
-        }
-        
-        /* Professional Button */
-        .professional-btn {
-            background: #0d9488;
-            color: white;
-            padding: 1rem 2.5rem;
-            border-radius: 1rem;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            white-space: nowrap;
-        }
-        .professional-btn:hover {
-            background: #0f766e;
-            transform: translateY(-1px);
-            box-shadow: 0 10px 25px -5px rgba(13, 148, 136, 0.4);
-        }
-        .professional-btn-outline {
-            background: transparent;
-            border: 2px solid #0d9488;
-            color: #0d9488;
-            padding: 0.875rem 2rem;
-            border-radius: 1rem;
-            font-weight: 600;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        .professional-btn-outline:hover {
-            background: #0d9488;
-            color: white;
-        }
-        
-        /* Progress Bar */
-        .progress-container {
-            background: #e2e8f0;
-            border-radius: 2rem;
-            height: 1rem;
+
+        /* ---------- Password Gate ---------- */
+        .auth-gate {
+            position: fixed; inset: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: center;
+            padding: 1.25rem;
+            background: var(--color-liquid-abyss);
             overflow: hidden;
         }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #0d9488, #14b8a6);
-            border-radius: 2rem;
-            transition: width 1s ease;
+        .auth-gate::before {
+            content: "";
+            position: absolute;
+            width: 640px; height: 640px;
+            background: radial-gradient(circle, rgba(0,130,124,0.28) 0%, transparent 62%);
+            top: -220px; right: -160px;
+            pointer-events: none;
         }
-        
-        /* Deadline Badge */
-        .deadline-badge {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            color: #92400e;
-            padding: 0.75rem 2rem;
-            border-radius: 3rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            border: 1px solid #fbbf24;
+        .auth-gate::after {
+            content: "";
+            position: absolute;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(250,209,255,0.10) 0%, transparent 68%);
+            bottom: -200px; left: -140px;
+            pointer-events: none;
         }
-        
-        /* Message Cards */
-        .message-card {
-            background: white;
-            border-radius: 1.5rem;
-            padding: 2rem;
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
-            border-right: 6px solid;
+
+        .auth-card {
+            position: relative; z-index: 2;
+            background: var(--color-liquid-kelp);
+            border-radius: 16px;
+            padding: 2.5rem 2.25rem;
+            width: 100%; max-width: 420px;
+            border: 1px solid rgba(187,199,198,0.08);
         }
-        .message-card.success { border-right-color: #10b981; }
-        .message-card.warning { border-right-color: #f59e0b; }
-        .message-card.error { border-right-color: #ef4444; }
-        
-        /* Floating Admin Button */
-        .floating-btn {
-            position: fixed;
-            bottom: 2rem;
-            left: 2rem;
-            background: #1e293b;
-            color: white;
-            width: 3.5rem;
-            height: 3.5rem;
-            border-radius: 3.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+
+        .lock-circle {
+            width: 4rem; height: 4rem;
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(0,130,124,0.35);
+            color: var(--color-liquid-mist);
+            font-size: 1.5rem;
+            margin: 0 auto 1.5rem;
+            border: 1px solid rgba(0,130,124,0.6);
+        }
+
+        .auth-input {
+            background: var(--color-liquid-abyss);
+            border: 1px solid rgba(187,199,198,0.15);
+            border-radius: 6px;
+            padding: 1rem 3rem 1rem 3rem;
+            width: 100%;
+            font-size: 1rem;
+            letter-spacing: 0.12em;
+            text-align: center;
+            color: var(--color-platinum);
+            transition: all 0.25s;
+            font-family: 'Inter', monospace;
+        }
+        .auth-input:focus {
+            outline: none;
+            border-color: #00827c;
+            box-shadow: 0 0 0 3px rgba(0,130,124,0.22);
+        }
+        .auth-input::placeholder { color: var(--color-slate-deep); letter-spacing: 0.2em; }
+
+        .eye-btn {
+            position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%);
+            color: var(--color-slate-deep);
+            background: none; border: none; padding: 0.35rem; cursor: pointer;
+            transition: color 0.2s;
+        }
+        .eye-btn:hover { color: #cbfffc; }
+
+        .shake { animation: shake 0.45s cubic-bezier(0.36,0.07,0.19,0.97) both; }
+        @keyframes shake {
+            10%, 90% { transform: translateX(-2px); }
+            20%, 80% { transform: translateX(4px); }
+            30%, 50%, 70% { transform: translateX(-7px); }
+            40%, 60% { transform: translateX(7px); }
+        }
+
+        /* ---------- Typography Utility ---------- */
+        .font-mono-num {
+            font-family: 'Inter', monospace;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.02em;
+        }
+        .uppercase-label {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--color-silver-mist);
+        }
+
+        /* ---------- Header ---------- */
+        .page-header {
+            position: relative;
+            border-radius: 16px;
+            padding: 2rem 2rem;
+            background: var(--color-liquid-deep);
+            border: 1px solid rgba(187,199,198,0.06);
+            overflow: hidden;
+        }
+        .page-header::before {
+            content: "";
+            position: absolute;
+            width: 480px; height: 480px;
+            background: radial-gradient(circle, rgba(0,130,124,0.35) 0%, transparent 65%);
+            top: -260px; right: -180px;
+            pointer-events: none;
+        }
+        .page-header::after {
+            content: "";
+            position: absolute;
+            width: 360px; height: 360px;
+            background: radial-gradient(circle, rgba(250,209,255,0.09) 0%, transparent 70%);
+            bottom: -200px; left: -100px;
+            pointer-events: none;
+        }
+        .page-header > * { position: relative; z-index: 1; }
+
+        /* Particle accent — small teal dot field */
+        .particles {
+            position: absolute; inset: 0;
+            pointer-events: none;
+            opacity: 0.55;
+            background-image:
+                radial-gradient(1.5px 1.5px at 20% 30%, rgba(203,255,252,0.65) 50%, transparent 51%),
+                radial-gradient(1.5px 1.5px at 80% 65%, rgba(0,130,124,0.9) 50%, transparent 51%),
+                radial-gradient(1px 1px at 45% 80%, rgba(250,209,255,0.55) 50%, transparent 51%),
+                radial-gradient(1px 1px at 65% 15%, rgba(203,255,252,0.5) 50%, transparent 51%),
+                radial-gradient(1.5px 1.5px at 10% 75%, rgba(0,130,124,0.8) 50%, transparent 51%);
+        }
+
+        /* ---------- Stat Cards (recessed wells) ---------- */
+        .stat-box {
+            background: var(--color-liquid-kelp);
+            border-radius: 16px;
+            padding: 1.25rem 1.25rem;
+            border: 1px solid rgba(187,199,198,0.06);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-box::before {
+            content: "";
+            position: absolute;
+            top: 0; right: 0; bottom: 0;
+            width: 3px;
+            background: transparent;
+            transition: background 0.3s;
+        }
+        .stat-box:hover::before {
+            background: linear-gradient(180deg, #00827c, #cbfffc);
+        }
+        .stat-box:hover {
+            border-color: rgba(0,130,124,0.4);
+            transform: translateY(-2px);
+        }
+        .stat-icon {
+            width: 2.5rem; height: 2.5rem;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+            background: rgba(0,55,52,0.65);
+            border: 1px solid rgba(0,130,124,0.3);
+            color: var(--color-liquid-mist);
+        }
+
+        .stat-number {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.03em;
+            color: var(--color-platinum);
+            line-height: 1;
+        }
+
+        /* ---------- Controls Panel ---------- */
+        .control-panel {
+            background: var(--color-liquid-kelp);
+            border-radius: 16px;
+            padding: 1.25rem;
+            border: 1px solid rgba(187,199,198,0.06);
+        }
+
+        .search-input {
+            background: var(--color-liquid-abyss);
+            border: 1px solid rgba(187,199,198,0.13);
+            border-radius: 6px;
+            padding: 0.8rem 1rem 0.8rem 2.75rem;
+            width: 100%;
+            font-size: 0.95rem;
+            color: var(--color-platinum);
+            transition: all 0.25s;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #00827c;
+            box-shadow: 0 0 0 3px rgba(0,130,124,0.18);
+        }
+        .search-input::placeholder { color: var(--color-slate-deep); }
+
+        .filter-chip {
+            padding: 0.55rem 1.15rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border: 1px solid rgba(187,199,198,0.15);
+            background: transparent;
+            color: var(--color-silver-mist);
             cursor: pointer;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s;
-            z-index: 40;
+            transition: all 0.25s;
+            white-space: nowrap;
         }
-        .floating-btn:hover { transform: scale(1.1); background: #0f172a; }
-        
-        /* Admin Modal */
-        .admin-modal {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
+        .filter-chip:hover { border-color: #00827c; color: var(--color-liquid-mist); }
+        .filter-chip.active {
+            background: #003734;
+            border-color: #00827c;
+            color: var(--color-platinum);
         }
-        .admin-modal-content {
-            background: white;
-            border-radius: 2rem;
-            padding: 2rem;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+        .sort-select {
+            background: var(--color-liquid-abyss);
+            border: 1px solid rgba(187,199,198,0.13);
+            border-radius: 6px;
+            padding: 0.7rem 0.9rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--color-silver-mist);
+            cursor: pointer;
+            transition: all 0.25s;
         }
-        
-        /* Stat Cards */
-        .stat-card {
-            background: #f8fafc;
-            border-radius: 1rem;
-            padding: 1rem;
-            border: 1px solid #e2e8f0;
+        .sort-select:focus { outline: none; border-color: #00827c; }
+        .sort-select option { background: var(--color-liquid-abyss); color: var(--color-platinum); }
+
+        /* ---------- Buttons ---------- */
+        .btn-primary {
+            background: var(--color-liquid-kelp);
+            color: var(--color-platinum);
+            padding: 0.85rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+            transition: all 0.25s;
+            cursor: pointer;
+            border: 1px solid rgba(0,130,124,0.5);
+            white-space: nowrap;
+        }
+        .btn-primary:hover {
+            background: rgba(0,130,124,0.3);
+            border-color: #00827c;
+            transform: translateY(-1px);
+        }
+
+        .btn-gradient {
+            background: var(--gradient-aurora);
+            color: #012624;
+            padding: 0.85rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+            transition: all 0.25s;
+            cursor: pointer;
+            border: none;
+            white-space: nowrap;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px -8px rgba(203,255,252,0.4);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--color-silver-mist);
+            border: 1px solid rgba(187,199,198,0.15);
+            padding: 0.7rem 1.1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            transition: all 0.25s;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-ghost:hover {
+            border-color: #00827c;
+            color: var(--color-liquid-mist);
+        }
+
+        /* ---------- Employee Card ---------- */
+        .emp-card {
+            background: var(--color-liquid-kelp);
+            border-radius: 16px;
+            padding: 1.25rem;
+            border: 1px solid rgba(187,199,198,0.06);
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            position: relative;
+            overflow: hidden;
+        }
+        .emp-card::before {
+            content: "";
+            position: absolute;
+            top: 0; right: 0; bottom: 0;
+            width: 3px;
+            background: rgba(187,199,198,0.1);
+            transition: background 0.3s;
+        }
+        .emp-card.is-registered::before {
+            background: linear-gradient(180deg, #00827c, #cbfffc);
+        }
+        .emp-card.is-pending::before {
+            background: linear-gradient(180deg, #fde9ff, #fad1ff);
+            opacity: 0.7;
+        }
+        .emp-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(0,130,124,0.4);
+        }
+        .emp-card:hover::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(0,130,124,0.12) 0%, transparent 55%);
+            pointer-events: none;
+        }
+
+        .avatar {
+            width: 2.75rem; height: 2.75rem;
+            min-width: 2.75rem;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--color-liquid-mist);
+            font-weight: 500;
+            font-size: 1.1rem;
+            background: rgba(0,55,52,0.7);
+            border: 1px solid rgba(0,130,124,0.35);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .badge {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        .badge-success {
+            background: rgba(0,130,124,0.22);
+            color: #cbfffc;
+            border: 1px solid rgba(0,130,124,0.45);
+        }
+        .badge-warning {
+            background: rgba(253,233,255,0.08);
+            color: var(--color-lavender-phosphor);
+            border: 1px solid rgba(253,233,255,0.22);
+        }
+
+        .nin-text {
+            font-family: 'Inter', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.02em;
+            color: var(--color-slate-deep);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* ---------- Pagination ---------- */
+        .page-btn {
+            min-width: 2.4rem; height: 2.4rem;
+            padding: 0 0.55rem;
+            border-radius: 6px;
+            border: 1px solid rgba(187,199,198,0.15);
+            background: transparent;
+            color: var(--color-silver-mist);
+            font-weight: 500;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex; align-items: center; justify-content: center;
+            transition: all 0.22s; cursor: pointer;
+        }
+        .page-btn:hover:not(:disabled) {
+            border-color: #00827c;
+            color: var(--color-liquid-mist);
+        }
+        .page-btn.active {
+            background: #003734;
+            border-color: #00827c;
+            color: var(--color-platinum);
+        }
+        .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+        /* ---------- Misc ---------- */
+        .fade-in { animation: fadeIn 0.45s ease both; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+        .skeleton {
+            background: linear-gradient(90deg, #011d1c 25%, #003734 37%, #011d1c 63%);
+            background-size: 400% 100%;
+            animation: shimmer 1.4s ease infinite;
+            border-radius: 16px;
+            height: 130px;
+        }
+        @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+        /* Radial glow divider */
+        .glow-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,130,124,0.35), transparent);
+        }
+
+        ::-webkit-scrollbar { width: 9px; height: 9px; }
+        ::-webkit-scrollbar-track { background: var(--color-liquid-abyss); }
+        ::-webkit-scrollbar-thumb { background: rgba(0,130,124,0.45); border-radius: 9px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0,130,124,0.7); }
+
+        /* Progress bar */
+        .mini-progress-track {
+            height: 4px;
+            background: rgba(187,199,198,0.1);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .mini-progress-fill {
+            height: 100%;
+            background: var(--gradient-bioluminescent);
+            border-radius: 999px;
+            transition: width 1s ease;
         }
     </style>
 </head>
 <body class="p-4 md:p-6 lg:p-8">
 
-    <!-- Floating Admin Button -->
-    <div class="floating-btn" onclick="toggleAdminModal()">
-        <i class="fas fa-cog text-xl"></i>
-    </div>
-
-    <!-- Admin Modal -->
-    <div id="adminModal" class="fixed inset-0 admin-modal hidden items-center justify-center z-50">
-        <div class="admin-modal-content">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">لوحة الإدارة</h2>
-                <button onclick="toggleAdminModal()" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times text-2xl"></i>
-                </button>
-            </div>
-            
-            <!-- Admin Login -->
-            <div id="adminLoginSection">
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-medium mb-2">كلمة المرور</label>
-                    <input type="password" id="adminPassword" placeholder="أدخل كلمة المرور" 
-                           class="professional-input" value="admin123">
-                </div>
-                <button onclick="adminLogin()" class="professional-btn w-full">
-                    <i class="fas fa-sign-in-alt"></i>
-                    <span>دخول</span>
-                </button>
-            </div>
-
-            <!-- Admin Panel (hidden until login) -->
-            <div id="adminPanelContent" style="display: none;">
-                <!-- Quick Stats -->
-                <div class="grid grid-cols-3 gap-3 mb-6">
-                    <div class="stat-card text-center">
-                        <div class="text-2xl font-bold text-teal-600" id="totalEmployeesStat">340</div>
-                        <div class="text-xs text-gray-500">الإجمالي</div>
-                    </div>
-                    <div class="stat-card text-center">
-                        <div class="text-2xl font-bold text-green-600" id="registeredStat">0</div>
-                        <div class="text-xs text-gray-500">مسجل</div>
-                    </div>
-                    <div class="stat-card text-center">
-                        <div class="text-2xl font-bold text-red-600" id="pendingStat">0</div>
-                        <div class="text-xs text-gray-500">غير مسجل</div>
-                    </div>
-                </div>
-
-                <!-- Add Employee -->
-                <div class="mb-6">
-                    <h3 class="font-bold text-gray-700 mb-3">➕ إضافة موظف مسجل</h3>
-                    <div class="space-y-3">
-                        <input type="text" id="newNin" placeholder="NIN" class="professional-input text-left" dir="ltr">
-                        <input type="text" id="newName" placeholder="الاسم الكامل" class="professional-input">
-                        <button onclick="addRegisteredEmployee()" class="professional-btn w-full">
-                            <i class="fas fa-save"></i>
-                            <span>إضافة</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Registered List (brief) -->
-                <div class="mb-6">
-                    <h3 class="font-bold text-gray-700 mb-3">📋 آخر المسجلين</h3>
-                    <div class="max-h-40 overflow-y-auto space-y-2 p-2 bg-gray-50 rounded-xl" id="registeredList"></div>
-                </div>
-
-                <!-- Deadline -->
-                <div>
-                    <h3 class="font-bold text-gray-700 mb-3">⏰ تعديل الموعد النهائي</h3>
-                    <div class="flex gap-2">
-                        <input type="date" id="deadlineDate" class="professional-input">
-                        <button onclick="updateDeadline()" class="professional-btn-outline px-6">
-                            <i class="fas fa-check"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
+<!-- ==================== PASSWORD GATE ==================== -->
+<div id="authGate" class="auth-gate">
+    <div class="auth-card" id="authCard">
+        <div class="lock-circle">
+            <i class="fas fa-lock"></i>
         </div>
-    </div>
 
-    <!-- Main Container -->
-    <div class="max-w-4xl mx-auto">
-        <!-- Header with Logo (no developer credit) -->
-        <div class="text-center mb-8">
-            <div class="inline-block mb-4">
-                <span class="text-7xl"><img src="/epsplogo.png" alt="dsp ghardaia" class="h-20 "></span>
-            </div>
-            <h1 class="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-2 tracking-tight">
-                EPSP <span class="text-teal-600">Berriane</span>
+        <div class="text-center mb-6">
+            <p class="uppercase-label mb-2">EPSP BERRIANE</p>
+            <h1 class="text-2xl font-medium text-white mb-1.5" style="letter-spacing:-0.02em">
+                منطقة محمية
             </h1>
-            <p class="text-gray-500 text-lg">منصة التحقق من التسجيلات المهنية</p>
+            <p class="text-sm" style="color:var(--color-silver-mist)">
+                أدخل كلمة المرور للوصول إلى قائمة الموظفين
+            </p>
         </div>
 
-        <!-- Deadline Banner -->
-        <div class="flex justify-center mb-8">
-            <div class="deadline-badge">
-                <i class="fas fa-calendar-alt"></i>
-                <span>آخر موعد للتسجيل: <span id="deadlineDisplay" class="font-extrabold">2025-03-30</span></span>
-            </div>
+        <div class="relative mb-4">
+            <input type="password" id="gatePassword"
+                   class="auth-input"
+                   placeholder="••••••••"
+                   autocomplete="current-password"
+                   onkeypress="if(event.key==='Enter') verifyPassword()">
+            <button type="button" class="eye-btn" onclick="togglePasswordVisibility()" tabindex="-1">
+                <i id="eyeIcon" class="fas fa-eye"></i>
+            </button>
         </div>
 
-        <!-- Main Search Card -->
-        <div class="status-card p-6 md:p-8 mb-6">
-            <div class="text-center mb-6">
-                <div class="w-20 h-20 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-search text-3xl text-teal-600"></i>
+        <p id="gateError" class="hidden text-sm font-medium text-center mb-4" style="color:#fad1ff">
+            <i class="fas fa-circle-exclamation mr-1"></i>
+            كلمة المرور غير صحيحة، حاول مرة أخرى
+        </p>
+
+        <button onclick="verifyPassword()" class="btn-gradient w-full !py-3.5">
+            <i class="fas fa-arrow-right"></i>
+            <span>دخول</span>
+        </button>
+
+        <div class="glow-divider my-5"></div>
+
+        <p class="text-center uppercase-label" style="font-size:10px">
+            <i class="fas fa-shield-halved mr-1"></i>
+            ACCESS RESTRICTED
+        </p>
+    </div>
+</div>
+
+<!-- ==================== MAIN CONTENT ==================== -->
+<div id="mainContent" class="hidden">
+    <div class="max-w-6xl mx-auto">
+
+        <!-- ---------- HEADER ---------- -->
+        <header class="page-header mb-6">
+            <div class="particles"></div>
+
+            <div class="flex flex-col md:flex-row items-center justify-between gap-5">
+                <div class="flex items-center gap-4 text-center md:text-right flex-col md:flex-row">
+                    <div class="rounded-2xl p-2.5" style="background:rgba(0,55,52,0.6);border:1px solid rgba(0,130,124,0.35)">
+                        <img src="/epsplogo.png" alt="EPSP Berriane" class="h-12 w-auto object-contain">
+                    </div>
+                    <div>
+                        <p class="uppercase-label mb-1.5">DIRECTORY · 340 MEMBERS</p>
+                        <h1 class="text-2xl md:text-3xl font-medium text-white tracking-tight" style="letter-spacing:-0.025em">
+                            قائمة الموظفين
+                        </h1>
+                        <p class="text-sm mt-1" style="color:var(--color-silver-mist)">
+                            EPSP Berriane — السجل الكامل وحالة التسجيل المهني
+                        </p>
+                    </div>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">التحقق من حالة التسجيل</h2>
-                <p class="text-gray-500">أدخل الرقم التعريفي الوطني (NIN) للتحقق</p>
+
+                <div class="flex items-center gap-2 flex-wrap justify-center">
+                    <a href="/index.html" class="btn-ghost">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>التحقق</span>
+                    </a>
+                    <button onclick="logout()" class="btn-ghost" title="تسجيل الخروج">
+                        <i class="fas fa-right-from-bracket"></i>
+                        <span class="hidden sm:inline">خروج</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Search Box -->
-            <div class="flex flex-col md:flex-row gap-3">
-                <div class="flex-grow">
-                    <input type="text" id="searchNin" 
-                            inputmode="numeric" 
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                            maxlength="18"
-                            placeholder="مثال: 298012345678" 
-                            class="professional-input text-left" 
-                            dir="ltr"
-                           onkeypress="handleKeyPress(event)">
+            <div class="glow-divider my-5"></div>
+
+            <div class="flex flex-wrap items-center gap-3">
+                <span class="inline-flex items-center gap-2 uppercase-label">
+                    <i class="fas fa-calendar-alt" style="color:#00827c"></i>
+                    DEADLINE: <span id="deadlineChip" class="font-medium" style="color:var(--color-liquid-mist);font-family:'Inter',sans-serif;letter-spacing:0">—</span>
+                </span>
+                <span class="uppercase-label" style="color:var(--color-slate-deep)">·</span>
+                <span class="inline-flex items-center gap-2 uppercase-label">
+                    <i class="fas fa-database" style="color:#00827c"></i>
+                    SYNC: <span id="lastUpdate" class="font-medium" style="color:var(--color-liquid-mist);font-family:'Inter',sans-serif;letter-spacing:0">—</span>
+                </span>
+            </div>
+        </header>
+
+        <!-- ---------- STATS ---------- -->
+        <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
+            <div class="stat-box flex items-center gap-3">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div>
+                    <div class="stat-number text-2xl" id="statTotal">0</div>
+                    <div class="uppercase-label mt-1.5" style="font-size:9px">TOTAL</div>
                 </div>
-                <button onclick="searchEmployee()" class="professional-btn md:w-auto w-full">
-                    <i class="fas fa-search"></i>
-                    <span>بحث</span>
+            </div>
+
+            <div class="stat-box flex items-center gap-3">
+                <div class="stat-icon" style="color:#cbfffc"><i class="fas fa-circle-check"></i></div>
+                <div>
+                    <div class="stat-number text-2xl" id="statRegistered" style="color:#cbfffc">0</div>
+                    <div class="uppercase-label mt-1.5" style="font-size:9px">REGISTERED</div>
+                </div>
+            </div>
+
+            <div class="stat-box flex items-center gap-3">
+                <div class="stat-icon" style="color:var(--color-lavender-phosphor);border-color:rgba(253,233,255,0.22)"><i class="fas fa-hourglass-half"></i></div>
+                <div>
+                    <div class="stat-number text-2xl" id="statPending" style="color:var(--color-lavender-phosphor)">0</div>
+                    <div class="uppercase-label mt-1.5" style="font-size:9px">PENDING</div>
+                </div>
+            </div>
+
+            <div class="stat-box flex items-center gap-3">
+                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="w-full">
+                    <div class="stat-number text-2xl" id="statPercent">0%</div>
+                    <div class="uppercase-label mt-1.5 mb-2" style="font-size:9px">COMPLETION</div>
+                    <div class="mini-progress-track">
+                        <div id="miniProgress" class="mini-progress-fill" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ---------- CONTROLS ---------- -->
+        <section class="control-panel mb-6">
+            <div class="flex flex-col lg:flex-row gap-3 lg:items-center">
+
+                <div class="relative flex-grow">
+                    <i class="fas fa-magnifying-glass absolute right-3.5 top-1/2 -translate-y-1/2" style="color:var(--color-slate-deep);font-size:0.85rem"></i>
+                    <input type="text" id="searchInput" placeholder="ابحث بالاسم أو الرقم التعريفي (NIN)..." class="search-input" autocomplete="off">
+                </div>
+
+                <div class="flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0">
+                    <button class="filter-chip active" data-status="all" onclick="setStatusFilter('all', this)">الكل</button>
+                    <button class="filter-chip" data-status="registered" onclick="setStatusFilter('registered', this)">مسجل</button>
+                    <button class="filter-chip" data-status="pending" onclick="setStatusFilter('pending', this)">غير مسجل</button>
+                </div>
+
+                <select id="sortSelect" onchange="setSort(this.value)" class="sort-select">
+                    <option value="name-asc">الاسم (أ ← ي)</option>
+                    <option value="name-desc">الاسم (ي ← أ)</option>
+                    <option value="status">حالة التسجيل</option>
+                    <option value="nin">الرقم التعريفي</option>
+                </select>
+
+                <button class="btn-ghost" onclick="exportCSV()" title="تصدير إلى CSV">
+                    <i class="fas fa-file-csv"></i>
+                    <span class="hidden sm:inline">تصدير</span>
                 </button>
             </div>
 
-            <!-- Progress Section -->
-            <div class="mt-8 pt-6 border-t border-gray-100">
-                <div class="flex justify-between items-center mb-3">
-                    <span class="text-gray-600 font-medium">نسبة الإنجاز</span>
-                    <span class="text-2xl font-bold text-teal-600" id="progressPercentage">0%</span>
-                </div>
-                <div class="progress-container">
-                    <div id="progressFill" class="progress-fill" style="width: 0%;"></div>
-                </div>
-                <div class="flex justify-between mt-3 text-gray-500">
-                    <span><span class="font-bold text-gray-800" id="registeredCount">0</span> مسجل</span>
-                    <span><span class="font-bold text-gray-800" id="totalCount">0</span> إجمالي</span>
-                </div>
+            <div class="glow-divider my-4"></div>
+
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <p class="uppercase-label" style="font-size:10px">
+                    SHOWING <span class="font-medium" style="color:#00827c;font-family:'Inter',sans-serif" id="shownFrom">0</span>
+                    –
+                    <span class="font-medium" style="color:#00827c;font-family:'Inter',sans-serif" id="shownTo">0</span>
+                    OF <span class="font-medium" style="color:var(--color-liquid-mist);font-family:'Inter',sans-serif" id="filteredCount">0</span>
+                </p>
+                <button id="resetBtn" onclick="resetFilters()" class="uppercase-label transition hidden" style="cursor:pointer;background:none;border:none;font-size:10px">
+                    <i class="fas fa-rotate-left mr-1"></i> RESET FILTERS
+                </button>
             </div>
-        </div>
+        </section>
 
-        <!-- Result Message (dynamic) -->
-        <div id="resultMessage" class="hidden mb-6 fade-in"></div>
+        <!-- ---------- RESULTS ---------- -->
+        <section>
+            <div id="loadingState" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+                <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+            </div>
+
+            <div id="employeesGrid" class="hidden grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+            <div id="emptyState" class="hidden text-center py-20 rounded-2xl" style="background:var(--color-liquid-kelp);border:1px solid rgba(187,199,198,0.06)">
+                <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style="background:rgba(0,55,52,0.65);border:1px solid rgba(0,130,124,0.3)">
+                    <i class="fas fa-user-slash text-xl" style="color:var(--color-slate-deep)"></i>
+                </div>
+                <h3 class="text-lg font-medium text-white mb-1">لا توجد نتائج</h3>
+                <p class="text-sm" style="color:var(--color-silver-mist)">جرّب تغيير كلمة البحث أو الفلاتر</p>
+            </div>
+
+            <div id="errorState" class="hidden text-center py-20 rounded-2xl" style="background:var(--color-liquid-kelp);border:1px solid rgba(253,233,255,0.15)">
+                <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style="background:rgba(253,233,255,0.06);border:1px solid rgba(253,233,255,0.2)">
+                    <i class="fas fa-triangle-exclamation text-xl" style="color:var(--color-lavender-phosphor)"></i>
+                </div>
+                <h3 class="text-lg font-medium text-white mb-1">تعذّر تحميل البيانات</h3>
+                <p class="text-sm mb-5" style="color:var(--color-silver-mist)">حدث خطأ في الاتصال بالخادم</p>
+                <button class="btn-primary mx-auto" onclick="loadEmployees()">
+                    <i class="fas fa-rotate-right"></i><span>RETRY</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ---------- PAGINATION ---------- -->
+        <nav id="pagination" class="flex flex-wrap items-center justify-center gap-2 mt-8"></nav>
+
+        <!-- ---------- FOOTER ---------- -->
+        <footer class="text-center mt-12 mb-4">
+            <div class="glow-divider mb-5 max-w-md mx-auto"></div>
+            <p class="uppercase-label" style="font-size:10px">
+                <i class="fas fa-shield-halved mr-1" style="color:#00827c"></i>
+                EPSP BERRIANE — PROFESSIONAL REGISTRY
+            </p>
+        </footer>
     </div>
+</div>
 
-    <script>
-        // ==================== CONFIGURATION ====================
-        // Change this to your actual worker URL
-        const API_BASE = 'https://cpepspberriane.didcrist.workers.dev';
-        
-        // ==================== STATE ====================
-        let employees = [];
-        let deadline = '2025-03-30';
-        let isAdminLoggedIn = false;
+<script>
+    // ==================== CONFIGURATION ====================
+    const API_BASE = 'https://cpepspberriane.didcrist.workers.dev';
+    const PAGE_SIZE = 24;
 
-        // ==================== INIT ====================
-        document.addEventListener('DOMContentLoaded', async () => {
-            await loadStats();
-            await loadDeadline();
+    // 🔐 كلمة المرور — غيّرها من هنا
+    const ACCESS_PASSWORD = 'admin123';
+
+    const SESSION_KEY = 'epsp_emploi_auth';
+
+    // ==================== STATE ====================
+    let allEmployees = [];
+    let filtered = [];
+    let currentPage = 1;
+    let statusFilter = 'all';
+    let searchTerm = '';
+    let sortBy = 'name-asc';
+    let deadline = '—';
+    let isUnlocked = false;
+
+    // ==================== AUTH ====================
+    function togglePasswordVisibility() {
+        const input = document.getElementById('gatePassword');
+        const icon = document.getElementById('eyeIcon');
+        const isHidden = input.type === 'password';
+        input.type = isHidden ? 'text' : 'password';
+        icon.className = isHidden ? 'fas fa-eye-slash' : 'fas fa-eye';
+    }
+
+    function verifyPassword() {
+        const input = document.getElementById('gatePassword');
+        const errorEl = document.getElementById('gateError');
+        const card = document.getElementById('authCard');
+
+        if (input.value === ACCESS_PASSWORD) {
+            sessionStorage.setItem(SESSION_KEY, '1');
+            unlockApp();
+        } else {
+            errorEl.classList.remove('hidden');
+            card.classList.remove('shake');
+            void card.offsetWidth;
+            card.classList.add('shake');
+            input.value = '';
+            input.focus();
+        }
+    }
+
+    function unlockApp() {
+        isUnlocked = true;
+        document.getElementById('authGate').style.display = 'none';
+        document.getElementById('mainContent').classList.remove('hidden');
+        loadDeadline();
+        loadEmployees();
+    }
+
+    function logout() {
+        if (!confirm('هل تريد تسجيل الخروج؟')) return;
+        sessionStorage.removeItem(SESSION_KEY);
+        location.reload();
+    }
+
+    // ==================== INIT ====================
+    document.addEventListener('DOMContentLoaded', () => {
+        if (sessionStorage.getItem(SESSION_KEY) === '1') {
+            unlockApp();
+        } else {
+            setTimeout(() => document.getElementById('gatePassword').focus(), 150);
+        }
+
+        const searchEl = document.getElementById('searchInput');
+        let debounce;
+        searchEl.addEventListener('input', (e) => {
+            clearTimeout(debounce);
+            const val = e.target.value;
+            debounce = setTimeout(() => {
+                searchTerm = val;
+                applyFilters();
+            }, 220);
+        });
+    });
+
+    // ==================== API ====================
+    async function apiGet(path) {
+        const res = await fetch(`${API_BASE}${path}`, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
+        return res.json();
+    }
+
+    async function loadDeadline() {
+        try {
+            const data = await apiGet('/api/settings/deadline');
+            deadline = data.deadline || '—';
+            document.getElementById('deadlineChip').textContent = deadline;
+        } catch (e) {
+            console.warn('Deadline load failed', e);
+        }
+    }
+
+    async function loadEmployees() {
+        if (!isUnlocked) return;
+        showState('loading');
+        try {
+            const data = await apiGet('/api/employees');
+            allEmployees = Array.isArray(data) ? data : [];
+
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent =
+                now.toLocaleDateString('fr-FR') + ' ' +
+                now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+            renderStats();
+            applyFilters();
+        } catch (e) {
+            console.error(e);
+            showState('error');
+        }
+    }
+
+    // ==================== HELPERS ====================
+    const isRegistered = (emp) => Number(emp.registered) === 1;
+
+    function escapeHtml(str) {
+        return String(str ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function initialOf(name) {
+        const n = String(name || '').trim();
+        return n ? n.charAt(0) : '?';
+    }
+
+    function formatDate(d) {
+        if (!d) return '';
+        return String(d).split('T')[0];
+    }
+
+    // ==================== STATS ====================
+    function renderStats() {
+        const total = allEmployees.length;
+        const registered = allEmployees.filter(isRegistered).length;
+        const pending = total - registered;
+        const percent = total > 0 ? Math.round((registered / total) * 100) : 0;
+
+        document.getElementById('statTotal').textContent = total;
+        document.getElementById('statRegistered').textContent = registered;
+        document.getElementById('statPending').textContent = pending;
+        document.getElementById('statPercent').textContent = percent + '%';
+        document.getElementById('miniProgress').style.width = percent + '%';
+    }
+
+    // ==================== FILTERS ====================
+    function setStatusFilter(status, btn) {
+        statusFilter = status;
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilters();
+    }
+
+    function setSort(value) {
+        sortBy = value;
+        applyFilters();
+    }
+
+    function resetFilters() {
+        searchTerm = '';
+        statusFilter = 'all';
+        sortBy = 'name-asc';
+        document.getElementById('searchInput').value = '';
+        document.getElementById('sortSelect').value = 'name-asc';
+        document.querySelectorAll('.filter-chip').forEach(c => {
+            c.classList.toggle('active', c.dataset.status === 'all');
+        });
+        applyFilters();
+    }
+
+    function applyFilters() {
+        const q = searchTerm.trim().toLowerCase();
+
+        filtered = allEmployees.filter(emp => {
+            if (statusFilter === 'registered' && !isRegistered(emp)) return false;
+            if (statusFilter === 'pending' && isRegistered(emp)) return false;
+            if (!q) return true;
+            const name = String(emp.name || '').toLowerCase();
+            const nin = String(emp.nin || '').toLowerCase();
+            return name.includes(q) || nin.includes(q);
         });
 
-        // ==================== API CALLS ====================
-        async function fetchAPI(endpoint, options = {}) {
-            const url = `${API_BASE}${endpoint}`;
-            const res = await fetch(url, {
-                ...options,
-                headers: { 'Content-Type': 'application/json', ...options.headers }
-            });
-            if (!res.ok) throw new Error(`API error: ${res.status}`);
-            return res.json();
-        }
-
-        async function loadStats() {
-            try {
-                const stats = await fetchAPI('/api/stats');
-                document.getElementById('registeredCount').textContent = stats.registered;
-                document.getElementById('totalCount').textContent = stats.total;
-                const percentage = stats.total > 0 ? Math.round((stats.registered / stats.total) * 100) : 0;
-                document.getElementById('progressPercentage').textContent = percentage + '%';
-                document.getElementById('progressFill').style.width = percentage + '%';
-                
-                if (isAdminLoggedIn) {
-                    document.getElementById('totalEmployeesStat').textContent = stats.total;
-                    document.getElementById('registeredStat').textContent = stats.registered;
-                    document.getElementById('pendingStat').textContent = stats.total - stats.registered;
+        filtered.sort((a, b) => {
+            switch (sortBy) {
+                case 'name-desc':
+                    return String(b.name || '').localeCompare(String(a.name || ''), 'ar');
+                case 'status': {
+                    const diff = Number(isRegistered(b)) - Number(isRegistered(a));
+                    if (diff !== 0) return diff;
+                    return String(a.name || '').localeCompare(String(b.name || ''), 'ar');
                 }
-            } catch (e) {
-                console.error('Failed to load stats', e);
+                case 'nin':
+                    return String(a.nin || '').localeCompare(String(b.nin || ''), 'en');
+                case 'name-asc':
+                default:
+                    return String(a.name || '').localeCompare(String(b.name || ''), 'ar');
             }
+        });
+
+        document.getElementById('resetBtn').classList.toggle(
+            'hidden',
+            !searchTerm && statusFilter === 'all' && sortBy === 'name-asc'
+        );
+
+        currentPage = 1;
+        render();
+    }
+
+    // ==================== RENDER ====================
+    function render() {
+        const grid = document.getElementById('employeesGrid');
+        const total = filtered.length;
+
+        document.getElementById('filteredCount').textContent = total;
+
+        if (total === 0) {
+            showState('empty');
+            document.getElementById('pagination').innerHTML = '';
+            document.getElementById('shownFrom').textContent = '0';
+            document.getElementById('shownTo').textContent = '0';
+            return;
         }
 
-        async function loadDeadline() {
-            try {
-                const data = await fetchAPI('/api/settings/deadline');
-                deadline = data.deadline || '2025-03-30';
-                document.getElementById('deadlineDisplay').textContent = deadline;
-                document.getElementById('deadlineDate').value = deadline;
-            } catch (e) {
-                console.error('Failed to load deadline', e);
-            }
-        }
+        const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+        if (currentPage > totalPages) currentPage = totalPages;
 
-        async function searchEmployee() {
-            const nin = document.getElementById('searchNin').value.trim();
-            if (!nin) {
-                showMessage('الرجاء إدخال الرقم التعريفي الوطني', 'error');
-                return;
-            }
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const pageItems = filtered.slice(start, start + PAGE_SIZE);
 
-            try {
-                const emp = await fetchAPI(`/api/employee?nin=${encodeURIComponent(nin)}`);
-                if (emp) {
-                    if (emp.registered) {
-                        showMessage(`
-                            <div class="text-center">
-                                <span class="text-6xl mb-4 block">✅</span>
-                                <h3 class="text-2xl font-bold text-green-600 mb-2">مسجل</h3>
-                                <p class="text-gray-700 mb-2">الموظف(ة): ${emp.name}</p>
-                                
-                                <p class="text-sm text-gray-500 mt-4">البطاقة المهنية قيد الطباعة</p>
-                            </div>
-                        `, 'success');
-                    } else {
-                        showMessage(`
-                            <div class="text-center">
-                                <span class="text-6xl mb-4 block">⚠️</span>
-                                <h3 class="text-2xl font-bold text-orange-600 mb-2">لم يتم التسجيل بعد</h3>
-                                <p class="text-gray-700 mb-4">الموظف: ${emp.name}</p>
-                                <div class="bg-orange-50 border-r-4 border-orange-500 p-4 rounded-lg">
-                                    <p class="text-orange-800 font-bold mb-2">يجب التسجيل قبل تاريخ: ${deadline}</p>
-                                    <p class="text-orange-700">الرجاء التوجه إلى منصة التسجيل:</p>
-                                    <a href="https://drhepspberriane.pages.dev" target="_blank" 
-                                       class="inline-block mt-2 bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition">
-                                        drhepspberriane.pages.dev
-                                    </a>
-                                </div>
-                            </div>
-                        `, 'warning');
-                    }
-                } else {
-                    showMessage(`
-                        <div class="text-center">
-                            <span class="text-6xl mb-4 block">❓</span>
-                            <h3 class="text-2xl font-bold text-red-600 mb-2">الرقم غير موجود</h3>
-                            <p class="text-gray-700 mb-4">لم يتم العثور على موظف بهذا الرقم</p>
-                            <div class="bg-red-50 border-r-4 border-red-500 p-4 rounded-lg">
-                                <p class="text-red-800 mb-2">يجب عليك التسجيل أولاً في المنصة الرئيسية، تأكد من صورة المرسلة والمعلومات المدخلة</p>
-                                <a href="https://drhepspberriane.pages.dev" target="_blank" 
-                                   class="inline-block mt-2 bg-red-500 text-white px-6 py-2 rounded-full hover:bg-red-600 transition">
-                                    الذهاب إلى منصة التسجيل
-                                </a>
-                            </div>
+        document.getElementById('shownFrom').textContent = start + 1;
+        document.getElementById('shownTo').textContent = start + pageItems.length;
+
+        grid.innerHTML = pageItems.map((emp, i) => {
+            const reg = isRegistered(emp);
+            const dateStr = formatDate(emp.date_registered);
+
+            return `
+                <article class="emp-card ${reg ? 'is-registered' : 'is-pending'} fade-in"
+                         style="animation-delay:${Math.min(i * 16, 280)}ms">
+                    <div class="flex items-start gap-3">
+                        <div class="avatar">
+                            ${escapeHtml(initialOf(emp.name))}
                         </div>
-                    `, 'error');
-                }
-            } catch (e) {
-                showMessage('حدث خطأ في الاتصال بالخادم', 'error');
-            }
-        }
-
-        function showMessage(html, type) {
-            const resultDiv = document.getElementById('resultMessage');
-            resultDiv.innerHTML = `<div class="message-card ${type}">${html}</div>`;
-            resultDiv.classList.remove('hidden');
-        }
-
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') searchEmployee();
-        }
-
-        // ==================== ADMIN FUNCTIONS ====================
-        function toggleAdminModal() {
-            const modal = document.getElementById('adminModal');
-            modal.classList.toggle('hidden');
-            modal.classList.toggle('flex');
-        }
-
-        async function adminLogin() {
-            const password = document.getElementById('adminPassword').value;
-            // In production, validate via API with a secure token
-            if (password === 'admin123') {
-                isAdminLoggedIn = true;
-                document.getElementById('adminLoginSection').style.display = 'none';
-                document.getElementById('adminPanelContent').style.display = 'block';
-                await loadStats();
-                await loadRegisteredList();
-            } else {
-                alert('كلمة المرور غير صحيحة');
-            }
-        }
-
-        async function loadRegisteredList() {
-            try {
-                const employees = await fetchAPI('/api/employees?registered=true');
-                const list = document.getElementById('registeredList');
-                list.innerHTML = employees.map(emp => `
-                    <div class="bg-white p-2 rounded-lg flex justify-between items-center text-sm">
-                        <span class="font-mono">${emp.nin}</span>
-                        <span>${emp.name}</span>
+                        <div class="flex-1 min-w-0 pt-0.5">
+                            <h3 class="font-medium text-white text-[0.95rem] leading-snug truncate"
+                                title="${escapeHtml(emp.name)}"
+                                style="letter-spacing:-0.01em">
+                                ${escapeHtml(emp.name || 'بدون اسم')}
+                            </h3>
+                            <p class="nin-text mt-1" dir="ltr">
+                                ${escapeHtml(emp.nin || '—')}
+                            </p>
+                        </div>
                     </div>
-                `).join('');
-                if (employees.length === 0) {
-                    list.innerHTML = '<p class="text-gray-500 text-center">لا يوجد مسجلون</p>';
-                }
-            } catch (e) {
-                console.error('Failed to load registered list', e);
+
+                    <div class="glow-divider my-3"></div>
+
+                    <div class="flex items-center justify-between">
+                        ${reg
+                            ? `<span class="badge badge-success"><i class="fas fa-circle-check"></i> مسجل</span>`
+                            : `<span class="badge badge-warning"><i class="fas fa-hourglass-half"></i> غير مسجل</span>`
+                        }
+                        <span class="nin-text" style="font-size:0.7rem">
+                            ${dateStr
+                                ? `<i class="far fa-calendar-check mr-1"></i>${escapeHtml(dateStr)}`
+                                : `<i class="far fa-calendar mr-1"></i>—`
+                            }
+                        </span>
+                    </div>
+                </article>
+            `;
+        }).join('');
+
+        showState('grid');
+        renderPagination(totalPages);
+    }
+
+    function showState(state) {
+        document.getElementById('loadingState').classList.toggle('hidden', state !== 'loading');
+        document.getElementById('loadingState').classList.toggle('grid', state === 'loading');
+        document.getElementById('employeesGrid').classList.toggle('hidden', state !== 'grid');
+        document.getElementById('employeesGrid').classList.toggle('grid', state === 'grid');
+        document.getElementById('emptyState').classList.toggle('hidden', state !== 'empty');
+        document.getElementById('errorState').classList.toggle('hidden', state !== 'error');
+    }
+
+    // ==================== PAGINATION ====================
+    function pageNumbers(current, total) {
+        const delta = 1;
+        const range = [];
+        const rangeWithDots = [];
+        let l;
+
+        for (let i = 1; i <= total; i++) {
+            if (i === 1 || i === total || (i >= current - delta && i <= current + delta)) {
+                range.push(i);
             }
         }
 
-        async function addRegisteredEmployee() {
-            const nin = document.getElementById('newNin').value.trim();
-            const name = document.getElementById('newName').value.trim();
-            if (!nin || !name) {
-                alert('الرجاء إدخال جميع البيانات');
-                return;
+        for (const i of range) {
+            if (l) {
+                if (i - l === 2) rangeWithDots.push(l + 1);
+                else if (i - l !== 1) rangeWithDots.push('...');
             }
+            rangeWithDots.push(i);
+            l = i;
+        }
+        return rangeWithDots;
+    }
 
-            try {
-                await fetchAPI('/api/employee', {
-                    method: 'POST',
-                    body: JSON.stringify({ nin, name, registered: true, date_registered: new Date().toISOString().split('T')[0] })
-                });
-                document.getElementById('newNin').value = '';
-                document.getElementById('newName').value = '';
-                await loadStats();
-                await loadRegisteredList();
-                alert('تمت الإضافة بنجاح');
-            } catch (e) {
-                alert('فشلت الإضافة');
+    function renderPagination(totalPages) {
+        const el = document.getElementById('pagination');
+        if (totalPages <= 1) { el.innerHTML = ''; return; }
+
+        let html = '';
+        html += `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''}
+                    onclick="goToPage(${currentPage - 1})" title="السابق">
+                    <i class="fas fa-chevron-right text-xs"></i>
+                 </button>`;
+
+        pageNumbers(currentPage, totalPages).forEach(p => {
+            if (p === '...') {
+                html += `<span class="px-1 font-medium" style="color:var(--color-slate-deep)">…</span>`;
+            } else {
+                html += `<button class="page-btn ${p === currentPage ? 'active' : ''}"
+                            onclick="goToPage(${p})">${p}</button>`;
             }
+        });
+
+        html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''}
+                    onclick="goToPage(${currentPage + 1})" title="التالي">
+                    <i class="fas fa-chevron-left text-xs"></i>
+                 </button>`;
+
+        el.innerHTML = html;
+    }
+
+    function goToPage(page) {
+        const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+        if (page < 1 || page > totalPages || page === currentPage) return;
+        currentPage = page;
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==================== EXPORT CSV ====================
+    function exportCSV() {
+        if (filtered.length === 0) {
+            alert('لا توجد بيانات للتصدير');
+            return;
         }
 
-        async function updateDeadline() {
-            const newDeadline = document.getElementById('deadlineDate').value;
-            if (!newDeadline) return;
-            try {
-                await fetchAPI('/api/settings/deadline', {
-                    method: 'POST',
-                    body: JSON.stringify({ deadline: newDeadline })
-                });
-                deadline = newDeadline;
-                document.getElementById('deadlineDisplay').textContent = deadline;
-                alert('تم تحديث الموعد النهائي');
-            } catch (e) {
-                alert('فشل التحديث');
-            }
-        }
-    </script>
+        const rows = [['NIN', 'الاسم الكامل', 'الحالة', 'تاريخ التسجيل']];
+        filtered.forEach(emp => {
+            rows.push([
+                emp.nin || '',
+                emp.name || '',
+                isRegistered(emp) ? 'مسجل' : 'غير مسجل',
+                formatDate(emp.date_registered) || ''
+            ]);
+        });
+
+        const csv = rows
+            .map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+            .join('\n');
+
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `EPSP_Berriane_Employes_${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+    }
+</script>
+
 </body>
 </html>
